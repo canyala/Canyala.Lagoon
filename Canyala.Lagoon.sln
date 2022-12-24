@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Canyala.Lagoon.Web", "Canya
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Canyala.Lagoon.Windows", "Canyala.Lagoon.Windows\Canyala.Lagoon.Windows.csproj", "{FBA13765-0484-4E0B-82A6-3DC5462E9051}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Canyala.Lagoon.Test", "Canyala.Lagoon.Test\Canyala.Lagoon.Test.csproj", "{C8A81E2D-3BF4-4380-B0D8-1F777302AF67}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{FBA13765-0484-4E0B-82A6-3DC5462E9051}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBA13765-0484-4E0B-82A6-3DC5462E9051}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBA13765-0484-4E0B-82A6-3DC5462E9051}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8A81E2D-3BF4-4380-B0D8-1F777302AF67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8A81E2D-3BF4-4380-B0D8-1F777302AF67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8A81E2D-3BF4-4380-B0D8-1F777302AF67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8A81E2D-3BF4-4380-B0D8-1F777302AF67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
