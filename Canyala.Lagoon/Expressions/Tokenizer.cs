@@ -24,17 +24,15 @@
 
 */
 
-using System;
 using System.Globalization;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Canyala.Lagoon.Expressions
 {
     internal class Tokenizer
     {
-        private Regex regEx = null;
-        private MatchCollection matches;
+        private readonly Regex regEx;
+        private readonly MatchCollection matches;
         private int currentMatch;
 
         public Tokenizer(string expression, NumberFormatInfo numberFormatInfo)
@@ -49,7 +47,7 @@ namespace Canyala.Lagoon.Expressions
         {
         }
 
-        private string RegExEscape(string s)
+        private static string RegExEscape(string s)
         {
             if (s == ".")
                 return @"\.";
