@@ -24,67 +24,66 @@
 
 */
 
-using Canyala.Lagoon.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Canyala.Lagoon.Collections
+using Canyala.Lagoon.Extensions;
+
+namespace Canyala.Lagoon.Collections;
+
+public class Bag<TKey> : IEnumerable<KeyValuePair<TKey, int>>
+    where TKey : notnull
 {
-    public class Bag<T> : IEnumerable<KeyValuePair<T, int>>
+    private readonly Dictionary<TKey, int> _bag = new();
+
+    public Bag(IEqualityComparer<TKey> comparer)
     {
-        private Dictionary<T, int> _bag = new Dictionary<T, int>();
-
-        public Bag(IEqualityComparer<T> comparer)
-        {
-            _bag = new Dictionary<T, int>(comparer);
-        }
-
-        public Bag(IEnumerable<T> seq)
-        { seq.Do(Add); }
-
-        public void Add(T element)
-        {
-            if (!_bag.ContainsKey(element))
-                _bag.Add(element, 1);
-            else
-                _bag[element]++;
-        }
-
-        public void Remove(T element)
-        {
-            if (_bag.ContainsKey(element))
-                _bag.Remove(element);
-        }
-
-        public void Clear()
-        {
-            _bag.Clear();
-        }
-
-        public int this[T element]
-        { get { return ElementCount(element); } }
-
-        public int ElementCount(T element)
-        {
-            int count = 0;
-            _bag.TryGetValue(element, out count);
-            return count;
-        }
-
-        public int Count { get { return _bag.Count; } }
-
-        public bool Contains(T element)
-        { return ElementCount(element) > 0; }
-
-        public IEnumerator<KeyValuePair<T, int>> GetEnumerator()
-        { return _bag.GetEnumerator(); }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        { return _bag.GetEnumerator(); }
-
-        public IEnumerable<T> Keys
-        { get { return _bag.Keys; } }
+        _bag = new Dictionary<TKey, int>(comparer);
     }
+
+    public Bag(IEnumerable<TKey> seq)
+    { seq.Do(Add); }
+
+    public void Add(TKey element)
+    {
+        if (!_bag.ContainsKey(element))
+            _bag.Add(element, 1);
+        else
+            _bag[element]++;
+    }
+
+    public void Remove(TKey element)
+    {
+        _bag.Remove(element);
+    }
+
+    public void Clear()
+    {
+        _bag.Clear();
+    }
+
+    public int this[TKey element]
+    { get { return ElementCount(element); } }
+
+    public int ElementCount(TKey element)
+    {
+        _bag.TryGetValue(element, out int count);
+        return count;
+    }
+
+    public int Count { get { return _bag.Count; } }
+
+    public bool Contains(TKey element)
+    { return ElementCount(element) > 0; }
+
+    public IEnumerator<KeyValuePair<TKey, int>> GetEnumerator()
+    { return _bag.GetEnumerator(); }
+
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    { return _bag.GetEnumerator(); }
+
+    public IEnumerable<TKey> Keys
+    { get { return _bag.Keys; } }
 }

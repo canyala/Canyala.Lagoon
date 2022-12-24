@@ -29,61 +29,65 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Canyala.Lagoon.Collections
+namespace Canyala.Lagoon.Collections;
+
+public class SubArray<T> : IEnumerable<T>
+    where T : notnull
 {
-    public class SubArray<T> : IEnumerable<T>
+    private readonly ArraySegment<T> _segment;
+
+    private SubArray(T[] parentArray, int offset, int count)
+    { _segment = new ArraySegment<T>(parentArray, offset, count); }
+
+    public static SubArray<T> Create(T[] parent, int offset, int count)
+    { return new SubArray<T>(parent, offset, count); }
+
+    public T this[int index]
     {
-        private ArraySegment<T> _segment;
-
-        private SubArray(T[] parentArray, int offset, int count)
-        { _segment = new ArraySegment<T>(parentArray, offset, count); }
-
-        public static SubArray<T> Create(T[] parent, int offset, int count)
-        { return new SubArray<T>(parent, offset, count); }
-
-        public T this[int index]
+        get
         {
-            get
-            {
-                if (index >= _segment.Count)
-                    throw new ArgumentOutOfRangeException();
-                return _segment.Array[index + _segment.Offset];
-            }
+            if (index >= _segment.Count)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            if (_segment.Array is null)
+                throw new ArgumentNullException(nameof(index));
+
+            return _segment.Array[index + _segment.Offset];
+        }
+    }
+
+    public int Length { get { return _segment.Count; } }
+
+    public IEnumerator<T> GetEnumerator()
+    { return new Enumerator(this); }
+
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    { return GetEnumerator(); }
+
+    class Enumerator : IEnumerator<T>
+    {
+        private readonly SubArray<T> _array;
+        private int _index;
+
+        internal Enumerator(SubArray<T> array)
+        {
+            _array = array;
+            _index = 0;
         }
 
-        public int Length { get { return _segment.Count; } }
+        public T Current
+        { get { return _array[_index]; } }
 
-        public IEnumerator<T> GetEnumerator()
-        { return new Enumerator(this); }
+        object System.Collections.IEnumerator.Current
+        { get { return Current; } }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        { return GetEnumerator(); }
+        public bool MoveNext()
+        { return ++_index < _array.Length; }
 
-        class Enumerator : IEnumerator<T>
-        {
-            private SubArray<T> _array;
-            private int _index;
+        public void Reset()
+        { _index = 0; }
 
-            internal Enumerator(SubArray<T> array)
-            {
-                _array = array;
-                _index = 0;
-            }
-
-            public T Current
-            { get { return _array[_index]; } }
-
-            object System.Collections.IEnumerator.Current
-            { get { return Current; } }
-
-            public bool MoveNext()
-            { return ++_index < _array.Length; }
-
-            public void Reset()
-            { _index = 0; }
-
-            public void Dispose()
-            { }
-        }
+        public void Dispose()
+        { }
     }
 }
