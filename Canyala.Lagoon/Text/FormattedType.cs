@@ -2,7 +2,7 @@
  
   MIT License
 
-  Copyright (c) 2022 Canyala Innovation
+  Copyright (c) 2012-2022 Canyala Innovation
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -24,16 +24,10 @@
 
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+namespace Canyala.Lagoon.Text;
 
-namespace Canyala.Lagoon.Text
+public class FormattedType
 {
-    public class FormattedType
-    {
-        public Type Type { get; set; }
-        public IEnumerable<string> Formats { get; set; }
-    }
+    public Type? Type { get; set; }
+    public IEnumerable<string>? Formats { get; set; }
 }

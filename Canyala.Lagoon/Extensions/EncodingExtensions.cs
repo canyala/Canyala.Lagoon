@@ -2,7 +2,7 @@
  
   MIT License
 
-  Copyright (c) 2022 Canyala Innovation
+  Copyright (c) 2012-2022 Canyala Innovation
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -24,26 +24,25 @@
 
 */
 
-using Canyala.Lagoon.Functional;
-using System.Collections.Generic;
 using System.Text;
 
-namespace Canyala.Lagoon.Extensions
-{
-    public static class EncodingExtensions
-    {
-        static public IEnumerable<byte> AsBytes(this IEnumerable<char> characters, Encoding encoding)
-        {
-            foreach (var c in characters)
-                foreach (var b in encoding.GetBytes(Seq.Array(c)))
-                    yield return b;
-        }
+using Canyala.Lagoon.Functional;
 
-        static public IEnumerable<char> AsChars(this IEnumerable<byte> bytes, Encoding encoding)
-        {
-            foreach (var b in bytes)
-                foreach (var c in encoding.GetChars(Seq.Array(b)))
-                    yield return c;
-        }
+namespace Canyala.Lagoon.Extensions;
+
+public static class EncodingExtensions
+{
+    static public IEnumerable<byte> AsBytes(this IEnumerable<char> characters, Encoding encoding)
+    {
+        foreach (var c in characters)
+            foreach (var b in encoding.GetBytes(Seq.Array(c)))
+                yield return b;
+    }
+
+    static public IEnumerable<char> AsChars(this IEnumerable<byte> bytes, Encoding encoding)
+    {
+        foreach (var b in bytes)
+            foreach (var c in encoding.GetChars(Seq.Array(b)))
+                yield return c;
     }
 }

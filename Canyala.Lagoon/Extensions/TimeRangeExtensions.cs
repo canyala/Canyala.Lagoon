@@ -2,7 +2,7 @@
  
   MIT License
 
-  Copyright (c) 2022 Canyala Innovation
+  Copyright (c) 2012-2022 Canyala Innovation
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -24,47 +24,41 @@
 
 */
 
-using Canyala.Lagoon.Functional;
 using Canyala.Lagoon.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Canyala.Lagoon.Extensions
+namespace Canyala.Lagoon.Extensions;
+
+public static class TimeRangeExtensions
 {
-    public static class TimeRangeExtensions
+    public static IEnumerable<TimeRange> Reduce(this IEnumerable<TimeRange> ranges)
     {
-        public static IEnumerable<TimeRange> Reduce(this IEnumerable<TimeRange> ranges)
+        List<TimeRange> input = new(ranges);
+        List<TimeRange> result = new();
+
+        if (input.Any())
         {
-            List<TimeRange> input = new List<TimeRange>(ranges);
-            List<TimeRange> result = new List<TimeRange>();
+            TimeRange current = TimeRange.Empty;
+            input.Sort();
 
-            if (input.Any())
+            foreach (var range in input)
             {
-                TimeRange current = TimeRange.Empty;
-                input.Sort();
-
-                foreach (var range in input)
+                if (current.IsEmpty)
+                    current = range;
+                else
                 {
-                    if (current.IsEmpty)
-                        current = range;
+                    if (current.Intersects(range))
+                        current = current.Union(range);
                     else
                     {
-                        if (current.Intersects(range))
-                            current = current.Union(range);
-                        else
-                        {
-                            result.Add(current);
-                            current = range;
-                        }
+                        result.Add(current);
+                        current = range;
                     }
                 }
-
-                result.Add(current);
             }
 
-            return result;
+            result.Add(current);
         }
+
+        return result;
     }
 }

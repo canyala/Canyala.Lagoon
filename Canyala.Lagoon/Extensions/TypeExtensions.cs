@@ -2,7 +2,7 @@
  
   MIT License
 
-  Copyright (c) 2022 Canyala Innovation
+  Copyright (c) 2012-2022 Canyala Innovation
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -24,49 +24,48 @@
 
 */
 
-namespace Canyala.Lagoon.Extensions
+namespace Canyala.Lagoon.Extensions;
+
+public static class TypeExtensions
 {
-    public static class TypeExtensions
+    public static T? MinValue<T>(this Type type)
     {
-        public static T MinValue<T>(this Type type)
-        {
-            if (type == typeof(DateTime))
-                return (T)(object)DateTime.MinValue;
+        if (type == typeof(DateTime))
+            return (T)(object)DateTime.MinValue;
 
-            if (type == typeof(double))
-                return (T)(object)double.MinValue;
+        if (type == typeof(double))
+            return (T)(object)double.MinValue;
 
-            if (type == typeof(float))
-                return (T)(object)float.MinValue;
+        if (type == typeof(float))
+            return (T)(object)float.MinValue;
 
-            if (type == typeof(long))
-                return (T)(object)Int32.MinValue;
+        if (type == typeof(long))
+            return (T)(object)Int32.MinValue;
 
-            if (type == typeof(int))
-                return (T)(object)Int32.MinValue;
+        if (type == typeof(int))
+            return (T)(object)Int32.MinValue;
 
-            return default(T);
-        }
-
-        public static T MaxValue<T>(this Type type)
-        {
-            if (type == typeof(DateTime))
-                return (T)(object)DateTime.MaxValue;
-
-            if (type == typeof(double))
-                return (T)(object)double.MaxValue;
-
-            if (type == typeof(float))
-                return (T)(object)float.MaxValue;
-
-            if (type == typeof(long))
-                return (T)(object)Int32.MaxValue;
-
-            if (type == typeof(int))
-                return (T)(object)Int32.MaxValue;
-
-            return default(T);
-        }
-
+        return default;
     }
+
+    public static T? MaxValue<T>(this Type type)
+    {
+        if (type == typeof(DateTime))
+            return (T)(object)DateTime.MaxValue;
+
+        if (type == typeof(double))
+            return (T)(object)double.MaxValue;
+
+        if (type == typeof(float))
+            return (T)(object)float.MaxValue;
+
+        if (type == typeof(long))
+            return (T)(object)Int32.MaxValue;
+
+        if (type == typeof(int))
+            return (T)(object)Int32.MaxValue;
+
+        return default;
+    }
+
 }

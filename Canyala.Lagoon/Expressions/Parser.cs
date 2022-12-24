@@ -2,7 +2,7 @@
  
   MIT License
 
-  Copyright (c) 2022 Canyala Innovation
+  Copyright (c) 2012-2022 Canyala Innovation
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -24,105 +24,98 @@
 
 */
 
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
 
-namespace Canyala.Lagoon.Expressions
+namespace Canyala.Lagoon.Expressions;
+
+internal class Parser
 {
-    internal class Parser
+    internal Expression ExpressionTree { get; private set; }
+
+    internal Parser(string expression, Symbols symbols)
     {
-        internal Expression ExpressionTree { get; private set; }
+        Symbols = symbols;
+        Tokens = new Tokenizer(expression);
+        ExpressionTree = ParseExpression();
+    }
 
-        internal Parser(string expression, Symbols symbols)
+    private readonly Tokenizer Tokens;
+    private readonly Symbols Symbols;
+
+    private Expression ParseExpression()
+    {
+        Expression? expression = null;
+
+        if (Tokens.Accept(token => token == "+"))
+            expression = ParseTerm();
+        else if (Tokens.Accept(token => token == "-"))
+            expression = Expression.Negate(ParseTerm());
+        else
+            expression = ParseTerm();
+
+        while (Tokens.Allow(token => token == "+" || token == "-"))
         {
-            Symbols = symbols;
-            Tokens = new Tokenizer(expression);
-            ExpressionTree = ParseExpression();
+            switch (Tokens.Read())
+            {
+                case "+":
+                    expression = Expression.Add(expression, ParseTerm());
+                    break;
+                case "-":
+                    expression = Expression.Subtract(expression, ParseTerm());
+                    break;
+            }
         }
 
-        private Tokenizer Tokens;
-        private Symbols Symbols;
+        return expression;
+    }
 
-        private Expression ParseExpression()
+    private Expression ParseTerm()
+    {
+        Expression expression = ParseFactor();
+
+        while (Tokens.Allow(token => token == "*" || token == "/"))
         {
-            Expression expression = null;
+            switch (Tokens.Read())
+            {
+                case "*":
+                    expression = Expression.Multiply(expression, ParseFactor());
+                    break;
+                case "/":
+                    expression = Expression.Divide(expression, ParseFactor());
+                    break;
+            }
+        }
 
-            if (Tokens.Accept(token => token == "+"))
-                expression = ParseTerm();
-            else if (Tokens.Accept(token => token == "-"))
-                expression = Expression.Negate(ParseTerm());
+        return expression;
+    }
+
+    private Expression ParseFactor()
+    {
+        Expression expression;
+
+        if (Tokens.Accept(token => token == "("))
+        {
+            expression = ParseExpression();
+            Tokens.Expect(token => token == ")");
+        }
+        else
+        {
+            if (Tokens.Allow(token => char.IsDigit(token[0])))
+            {
+                expression = Expression.Constant(Double.Parse(Tokens.Read(), CultureInfo.InvariantCulture.NumberFormat));
+            }
+            else if (Tokens.Allow(token => char.IsLetter(token[0]) || token[0] == '?'))
+            {
+                Expression[] argumentValues = { Expression.Constant(Tokens.Read()) };
+                expression = Expression.Call(Expression.Constant(Symbols), typeof(Symbols).GetMethod("ValueOf"), argumentValues);
+            }
             else
-                expression = ParseTerm();
-
-            while (Tokens.Allow(token => token == "+" || token == "-"))
-            {
-                switch (Tokens.Read())
-                {
-                    case "+":
-                        expression = Expression.Add(expression, ParseTerm());
-                        break;
-                    case "-":
-                        expression = Expression.Subtract(expression, ParseTerm());
-                        break;
-                }
-            }
-
-            return expression;
-        }
-
-        private Expression ParseTerm()
-        {
-            Expression expression = ParseFactor();
-
-            while (Tokens.Allow(token => token == "*" || token == "/"))
-            {
-                switch (Tokens.Read())
-                {
-                    case "*":
-                        expression = Expression.Multiply(expression, ParseFactor());
-                        break;
-                    case "/":
-                        expression = Expression.Divide(expression, ParseFactor());
-                        break;
-                }
-            }
-
-            return expression;
-        }
-
-        private Expression ParseFactor()
-        {
-            Expression expression;
-
-            if (Tokens.Accept(token => token == "("))
             {
                 expression = ParseExpression();
-                Tokens.Expect(token => token == ")");
             }
-            else
-            {
-                if (Tokens.Allow(token => char.IsDigit(token[0])))
-                {
-                    expression = Expression.Constant(Double.Parse(Tokens.Read(), CultureInfo.InvariantCulture.NumberFormat));
-                }
-                else if (Tokens.Allow(token => char.IsLetter(token[0]) || token[0] == '?'))
-                {
-                    Expression[] argumentValues = { Expression.Constant(Tokens.Read()) };
-                    expression = Expression.Call(Expression.Constant(Symbols), typeof(Symbols).GetMethod("ValueOf"), argumentValues);
-                }
-                else
-                {
-                    expression = ParseExpression();
-                }
-            }
-
-            return expression;
         }
+
+        return expression;
     }
 }

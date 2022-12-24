@@ -2,7 +2,7 @@
  
   MIT License
 
-  Copyright (c) 2022 Canyala Innovation
+  Copyright (c) 2012-2022 Canyala Innovation
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -24,44 +24,37 @@
 
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+namespace Canyala.Lagoon.Expressions;
 
-namespace Canyala.Lagoon.Expressions
+public class Symbols
 {
-    public class Symbols
+    private readonly Dictionary<string, double> dictionary;
+
+    public Symbols()
     {
-        private Dictionary<string, double> dictionary = null;
+        dictionary = new Dictionary<string, double>();
+    }
 
-        public Symbols()
-        {
-            dictionary = new Dictionary<string, double>();
-        }
+    public Symbols(string name, double value) : this()
+    {
+        Assign(name, value);
+    }
 
-        public Symbols(string name, double value) : this()
-        {
-            Assign(name, value);
-        }
+    public double this[string name]
+    {
+        get { return ValueOf(name); }
+        set { Assign(name, value); }
+    }
 
-        public double this[string name]
-        {
-            get { return ValueOf(name); }
-            set { Assign(name, value); }
-        }
+    public double ValueOf(string name)
+    {
+        if (dictionary.TryGetValue(name, out double value))
+            return value;
+        return 0.0;
+    }
 
-        public double ValueOf(string name)
-        {
-            double value;
-            if (dictionary.TryGetValue(name, out value))
-                return value;
-            return 0.0;
-        }
-
-        public void Assign(string name, double value)
-        {
-            dictionary[name] = value;
-        }
+    public void Assign(string name, double value)
+    {
+        dictionary[name] = value;
     }
 }

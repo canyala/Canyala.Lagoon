@@ -2,7 +2,7 @@
  
   MIT License
 
-  Copyright (c) 2022 Canyala Innovation
+  Copyright (c) 2012-2022 Canyala Innovation
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -24,43 +24,35 @@
 
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Text.RegularExpressions;
 
-namespace Canyala.Lagoon.Expressions
+namespace Canyala.Lagoon.Expressions;
+
+public class Compiler
 {
-    public class Compiler
+    static public double Evaluate(string expression, Symbols? symbols = null)
     {
-        static public double Evaluate(string expression, Symbols symbols = null)
-        {
-            if (symbols == null)
-                symbols = new Symbols();
+        symbols ??= new Symbols();
 
-            Parser parser = new Parser(expression, symbols);
-            Expression<Func<double>> lambdaExpression = Expression.Lambda<Func<double>>(parser.ExpressionTree);
-            Func<double> compiledExpression = lambdaExpression.Compile();
-            return compiledExpression();
-        }
-
-        public Compiler(string expression, Symbols symbols = null)
-        {
-            if (symbols == null)
-                symbols = new Symbols();
-
-            Symbols = symbols;
-            Parser parser = new Parser(expression, symbols);
-            Expression<Func<double>> lambdaExpression = Expression.Lambda<Func<double>>(parser.ExpressionTree);
-            compiledExpression = lambdaExpression.Compile();
-        }
-
-        public double Value { get { return compiledExpression(); } }
-        public Symbols Symbols { get; set; }
-
-        private Func<double> compiledExpression;
+        Parser parser = new Parser(expression, symbols);
+        Expression<Func<double>> lambdaExpression = Expression.Lambda<Func<double>>(parser.ExpressionTree);
+        Func<double> compiledExpression = lambdaExpression.Compile();
+        return compiledExpression();
     }
+
+    public Compiler(string expression, Symbols? symbols = null)
+    {
+        symbols ??= new Symbols();
+
+        Symbols = symbols;
+        Parser parser = new Parser(expression, symbols);
+        Expression<Func<double>> lambdaExpression = Expression.Lambda<Func<double>>(parser.ExpressionTree);
+        compiledExpression = lambdaExpression.Compile();
+    }
+
+    public double Evaluate() { return compiledExpression(); } 
+    public Symbols Symbols { get; set; }
+
+    private readonly Func<double> compiledExpression;
 }
 

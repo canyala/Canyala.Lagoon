@@ -2,7 +2,7 @@
  
   MIT License
 
-  Copyright (c) 2022 Canyala Innovation
+  Copyright (c) 2012-2022 Canyala Innovation
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -24,116 +24,106 @@
 
 */
 
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 
-namespace Canyala.Lagoon.Expressions
+namespace Canyala.Lagoon.Expressions;
+
+public class Interpreter
 {
-    public class Interpreter
+    public static double Evaluate(string expression, Symbols? symbols = null)
     {
-        public static double Evaluate(string expression, Symbols symbols = null)
-        {
-            if (symbols == null)
-                symbols = new Symbols();
+        symbols ??= new Symbols();
+        Interpreter interpreter = new Interpreter(expression, symbols);
+        return interpreter.Evaluate();
+    }
 
-            Interpreter interpreter = new Interpreter(expression, symbols);
-            return interpreter.Value;
-        }
+    public Interpreter(string expression, Symbols? symbols = null)
+    {
+        Symbols = symbols ?? new Symbols();
+        Tokens = new Tokenizer(expression);
+    }
 
-        public Interpreter(string expression, Symbols symbols = null)
-        {
-            Symbols = symbols ?? new Symbols();
-            Tokens = new Tokenizer(expression);
-        }
+    public double Evaluate()
+    {
+        Tokens.Initialize();
+        return InterpretValue();
+    }
 
-        public double Value
+    public Symbols Symbols { get; set; }
+    private readonly Tokenizer Tokens;
+
+    private double InterpretValue()
+    {
+        double value;
+
+        if (Tokens.Accept(token => token == "+"))
+            value = InterpretTerm();
+        else if (Tokens.Accept(token => token == "-"))
+            value = -InterpretTerm();
+        else
+            value = InterpretTerm();
+
+        while (Tokens.Allow(token => token == "+" || token == "-"))
         {
-            get
+            switch (Tokens.Read())
             {
-                Tokens.Initialize();
-                return InterpretExpression();
+                case "+":
+                    value = value + InterpretTerm();
+                    break;
+                case "-":
+                    value = value - InterpretTerm();
+                    break;
             }
         }
 
-        public Symbols Symbols { get; set; }
-        private Tokenizer Tokens;
+        return value;
+    }
 
-        private double InterpretExpression()
+    private double InterpretTerm()
+    {
+        double value = InterpretFactor();
+
+        while (Tokens.Allow(token => token == "*" || token == "/"))
         {
-            double value;
+            switch (Tokens.Read())
+            {
+                case "*":
+                    value = value * InterpretFactor();
+                    break;
+                case "/":
+                    value = value / InterpretFactor();
+                    break;
+            }
+        }
 
-            if (Tokens.Accept(token => token == "+"))
-                value = InterpretTerm();
-            else if (Tokens.Accept(token => token == "-"))
-                value = -InterpretTerm();
+        return value;
+    }
+
+    private double InterpretFactor()
+    {
+        double value;
+
+        if (Tokens.Accept(token => token == "("))
+        {
+            value = InterpretValue();
+            Tokens.Expect(token => token == ")");
+        }
+        else
+        {
+            if (Tokens.Allow(token => char.IsDigit(token[0])))
+            {
+                value = Double.Parse(Tokens.Read(), CultureInfo.InvariantCulture.NumberFormat);
+            }
+            else if (Tokens.Allow(token => char.IsLetter(token[0]) || token[0] == '?'))
+            {
+                value = Symbols.ValueOf(Tokens.Read());
+            }
             else
-                value = InterpretTerm();
-
-            while (Tokens.Allow(token => token == "+" || token == "-"))
             {
-                switch (Tokens.Read())
-                {
-                    case "+":
-                        value = value + InterpretTerm();
-                        break;
-                    case "-":
-                        value = value - InterpretTerm();
-                        break;
-                }
+                value = InterpretValue();
             }
-
-            return value;
         }
 
-        private double InterpretTerm()
-        {
-            double value = InterpretFactor();
-
-            while (Tokens.Allow(token => token == "*" || token == "/"))
-            {
-                switch (Tokens.Read())
-                {
-                    case "*":
-                        value = value * InterpretFactor();
-                        break;
-                    case "/":
-                        value = value / InterpretFactor();
-                        break;
-                }
-            }
-
-            return value;
-        }
-
-        private double InterpretFactor()
-        {
-            double value;
-
-            if (Tokens.Accept(token => token == "("))
-            {
-                value = InterpretExpression();
-                Tokens.Expect(token => token == ")");
-            }
-            else
-            {
-                if (Tokens.Allow(token => char.IsDigit(token[0])))
-                {
-                    value = Double.Parse(Tokens.Read(), CultureInfo.InvariantCulture.NumberFormat);
-                }
-                else if (Tokens.Allow(token => char.IsLetter(token[0]) || token[0] == '?'))
-                {
-                    value = Symbols.ValueOf(Tokens.Read());
-                }
-                else
-                {
-                    value = InterpretExpression();
-                }
-            }
-
-            return value;
-        }
+        return value;
     }
 }

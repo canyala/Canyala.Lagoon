@@ -2,7 +2,7 @@
  
   MIT License
 
-  Copyright (c) 2022 Canyala Innovation
+  Copyright (c) 2012-2022 Canyala Innovation
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -24,48 +24,43 @@
 
 */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Canyala.Lagoon.Functional
+namespace Canyala.Lagoon.Functional;
+
+/// <summary>
+/// Static class to be used to generate a IComparer with custom behaviour
+/// for LINQ expressions.
+/// </summary>
+/// <remarks>
+/// Using the Comparison class you can simplify the situation where you need to supply 
+/// an IComparer with a Linq expression.
+/// 
+/// var products = GetProducts().OrderBy(x => x.ProductId,  Comparison.With((x,y) => String.Compare(x.Name, y.Name)));
+/// </remarks>
+public static class Comparison
 {
     /// <summary>
-    /// Static class to be used to generate a IComparer with custom behaviour
-    /// for LINQ expressions.
+    /// Returns a generic instance of the IComparer interface where
+    /// the Compare() method calls the function given.
     /// </summary>
-    /// <remarks>
-    /// Using the Comparison class you can simplify the situation where you need to supply 
-    /// an IComparer with a Linq expression.
-    /// 
-    /// var products = GetProducts().OrderBy(x => x.ProductId,  Comparison.With((x,y) => String.Compare(x.Name, y.Name)));
-    /// </remarks>
-    public static class Comparison
+    /// <typeparam name="T">Type of objects to compare</typeparam>
+    /// <param name="func">The compare function to use.</param>
+    /// <returns>New instance of the GenericComparer class using the function given.</returns>
+    public static IComparer<T> With<T>(Func<T, T, int> func)
     {
-        /// <summary>
-        /// Returns a generic instance of the IComparer interface where
-        /// the Compare() method calls the function given.
-        /// </summary>
-        /// <typeparam name="T">Type of objects to compare</typeparam>
-        /// <param name="func">The compare function to use.</param>
-        /// <returns>New instance of the GenericComparer class using the function given.</returns>
-        public static IComparer<T> With<T>(Func<T, T, int> func)
-        {
-            return new GenericComparer<T>(func);
-        }
+        return new GenericComparer<T>(func);
+    }
 
-        /// <summary>
-        /// Returns a instance of the IComparer interface where
-        /// the Compare() method calls the function given.
-        /// </summary>
-        /// <typeparam name="T">Type of objects to compare</typeparam>
-        /// <param name="func">The compare function to use.</param>
-        /// <returns>New instance of the GenericComparer class using the function given.</returns>
-        public static IComparer WithIComparer<T>(Func<T, T, int> func)
-        {
-            return new GenericComparer<T>(func);
-        }
+    /// <summary>
+    /// Returns a instance of the IComparer interface where
+    /// the Compare() method calls the function given.
+    /// </summary>
+    /// <typeparam name="T">Type of objects to compare</typeparam>
+    /// <param name="func">The compare function to use.</param>
+    /// <returns>New instance of the GenericComparer class using the function given.</returns>
+    public static IComparer WithIComparer<T>(Func<T, T, int> func)
+    {
+        return new GenericComparer<T>(func);
     }
 }

@@ -2,7 +2,7 @@
  
   MIT License
 
-  Copyright (c) 2022 Canyala Innovation
+  Copyright (c) 2012-2022 Canyala Innovation
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -24,25 +24,20 @@
 
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 namespace Canyala.Lagoon.Collections;
 
-public class SubArray<T> : IEnumerable<T>
-    where T : notnull
+public class SubArray<TValue> : IEnumerable<TValue>
+    where TValue : notnull
 {
-    private readonly ArraySegment<T> _segment;
+    private readonly ArraySegment<TValue> _segment;
 
-    private SubArray(T[] parentArray, int offset, int count)
-    { _segment = new ArraySegment<T>(parentArray, offset, count); }
+    private SubArray(TValue[] parentArray, int offset, int count)
+    { _segment = new ArraySegment<TValue>(parentArray, offset, count); }
 
-    public static SubArray<T> Create(T[] parent, int offset, int count)
-    { return new SubArray<T>(parent, offset, count); }
+    public static SubArray<TValue> Create(TValue[] parent, int offset, int count)
+    { return new SubArray<TValue>(parent, offset, count); }
 
-    public T this[int index]
+    public TValue this[int index]
     {
         get
         {
@@ -58,24 +53,24 @@ public class SubArray<T> : IEnumerable<T>
 
     public int Length { get { return _segment.Count; } }
 
-    public IEnumerator<T> GetEnumerator()
+    public IEnumerator<TValue> GetEnumerator()
     { return new Enumerator(this); }
 
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
     { return GetEnumerator(); }
 
-    class Enumerator : IEnumerator<T>
+    class Enumerator : IEnumerator<TValue>
     {
-        private readonly SubArray<T> _array;
+        private readonly SubArray<TValue> _array;
         private int _index;
 
-        internal Enumerator(SubArray<T> array)
+        internal Enumerator(SubArray<TValue> array)
         {
             _array = array;
             _index = 0;
         }
 
-        public T Current
+        public TValue Current
         { get { return _array[_index]; } }
 
         object System.Collections.IEnumerator.Current

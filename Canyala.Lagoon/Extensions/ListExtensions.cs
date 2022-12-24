@@ -2,7 +2,7 @@
  
   MIT License
 
-  Copyright (c) 2022 Canyala Innovation
+  Copyright (c) 2012-2022 Canyala Innovation
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -24,27 +24,21 @@
 
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+namespace Canyala.Lagoon.Extensions;
 
-namespace Canyala.Lagoon.Extensions
+public static class ListExtensions
 {
-    public static class ListExtensions
+    /// <summary>
+    /// Take an item from a list.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="list">This list.</param>
+    /// <param name="index">The index of the item to take.</param>
+    /// <returns>The item as a 'T'.</returns>
+    static public T TakeAt<T>(this List<T> list, int index)
     {
-        /// <summary>
-        /// Take an item from a list.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list">This list.</param>
-        /// <param name="index">The index of the item to take.</param>
-        /// <returns>The item as a 'T'.</returns>
-        static public T TakeAt<T>(this List<T> list, int index)
-        {
-            T item = list[index];
-            list.RemoveAt(index);
-            return item;
-        }
+        T item = list[index];
+        list.RemoveAt(index);
+        return item;
     }
 }

@@ -2,7 +2,7 @@
  
   MIT License
 
-  Copyright (c) 2022 Canyala Innovation
+  Copyright (c) 2012-2022 Canyala Innovation
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -24,29 +24,22 @@
 
 */
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+namespace Canyala.Lagoon.Extensions;
 
-namespace Canyala.Lagoon.Extensions
+public static class StreamExtensions
 {
-    public static class StreamExtensions
+    public static void Write(this Stream stream, IEnumerable<byte> bytes)
     {
-        public static void Write(this Stream stream, IEnumerable<byte> bytes)
-        {
-            foreach (var value in bytes)
-                stream.WriteByte(value);
-        }
+        foreach (var value in bytes)
+            stream.WriteByte(value);
+    }
 
-        public static IEnumerable<byte> AsBytes(this Stream stream, int bufferSize = 1024)
-        {
-            var bytesRead = 0;
-            var buffer = new byte[bufferSize];
-            while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
-                for (int i = 0; i < bytesRead; i++)
-                    yield return buffer[i];
-        }
+    public static IEnumerable<byte> AsBytes(this Stream stream, int bufferSize = 1024)
+    {
+        var bytesRead = 0;
+        var buffer = new byte[bufferSize];
+        while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
+            for (int i = 0; i < bytesRead; i++)
+                yield return buffer[i];
     }
 }

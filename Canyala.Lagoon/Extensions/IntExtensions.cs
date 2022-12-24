@@ -2,7 +2,7 @@
  
   MIT License
 
-  Copyright (c) 2022 Canyala Innovation
+  Copyright (c) 2012-2022 Canyala Innovation
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -25,16 +25,11 @@
 */
 
 using Canyala.Lagoon.Functional;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Canyala.Lagoon.Extensions
+namespace Canyala.Lagoon.Extensions;
+
+public static class IntExtensions
 {
-    public static class IntExtensions
-    {
-        public static IEnumerable<T> Generate<T>(this int count, Func<T> generator)
-        { return Seq.Generate(count, generator); }
-    }
+    public static IEnumerable<T> Generate<T>(this int count, Func<T> generator)
+    { return Seq.Generate(count, generator); }
 }

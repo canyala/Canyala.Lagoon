@@ -2,7 +2,7 @@
  
   MIT License
 
-  Copyright (c) 2022 Canyala Innovation
+  Copyright (c) 2012-2022 Canyala Innovation
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -24,62 +24,55 @@
 
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 
-namespace Canyala.Lagoon.Reflection
+namespace Canyala.Lagoon.Reflection;
+
+/// <summary>
+/// SemanticProperty provides a type representing properties with a semantic meaning.
+/// 
+/// The assumption is that properties of the same type and name have
+/// the same semantic meaning even if they are part of different classes.
+/// This assumption is used as a base for implementing copy between different
+/// classes, thereby bridging the gap between the statically typed and 
+/// dynamically typed world's and in a sense provide a 
+/// typesafe 'duck copy' for the static world.
+/// </summary>
+public class SemanticProperty
 {
-    /// <summary>
-    /// SemanticProperty provides a type representing properties with a semantic meaning.
-    /// 
-    /// The assumption is that properties of the same type and name have
-    /// the same semantic meaning even if they are part of different classes.
-    /// This assumption is used as a base for implementing copy between different
-    /// classes, thereby bridging the gap between the statically typed and 
-    /// dynamically typed world's and in a sense provide a 
-    /// typesafe 'duck copy' for the static world.
-    /// </summary>
-    public class SemanticProperty
+    public Type Type { get; private set; }
+    public string Name { get; private set; }
+
+    private SemanticProperty(PropertyInfo propertyInfo)
     {
-        public Type Type { get; private set; }
-        public string Name { get; private set; }
+        Type = propertyInfo.PropertyType;
+        Name = propertyInfo.Name;
+    }
 
-        private SemanticProperty(PropertyInfo propertyInfo)
-        {
-            Type = propertyInfo.PropertyType;
-            Name = propertyInfo.Name;
-        }
+    public SemanticProperty(Type type, string name)
+    {
+        Type = type;
+        Name = name;
+    }
 
-        public SemanticProperty(Type type, string name)
-        {
-            Type = type;
-            Name = name;
-        }
+    internal static SemanticProperty FromPropertyInfo(PropertyInfo propertyInfo)
+    {
+        return new SemanticProperty(propertyInfo);
+    }
 
-        internal static SemanticProperty FromPropertyInfo(PropertyInfo propertyInfo)
-        {
-            return new SemanticProperty(propertyInfo);
-        }
+    public override bool Equals(object? instance)
+    {
+        if (instance is not SemanticProperty target)
+            return false;
 
-        public override bool Equals(object instance)
-        {
-            var target = instance as SemanticProperty;
+        if (Type != target.Type)
+            return false;
 
-            if (target == null)
-                return false;
+        return Name.Equals(target.Name);
+    }
 
-            if (Type != target.Type)
-                return false;
-
-            return Name.Equals(target.Name);
-        }
-
-        public override int GetHashCode()
-        {
-            return Name.GetHashCode() ^ Type.GetHashCode();
-        }
+    public override int GetHashCode()
+    {
+        return Name.GetHashCode() ^ Type.GetHashCode();
     }
 }

@@ -2,7 +2,7 @@
  
   MIT License
 
-  Copyright (c) 2022 Canyala Innovation
+  Copyright (c) 2012-2022 Canyala Innovation
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -24,43 +24,37 @@
 
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+namespace Canyala.Lagoon.Functional;
 
-namespace Canyala.Lagoon.Functional
+/// <summary>
+/// Generic equality comparer implementation which is returned by the 
+/// Equality.With() static (<see cref="Equality"/>) method to be used with linq expressions where
+/// you need to supply an IEqualityComparer.
+/// </summary>
+/// <typeparam name="T">Type of objects being compared.</typeparam>
+internal class GenericEqualityComparer<T> : EqualityComparer<T?>
 {
-    /// <summary>
-    /// Generic equality comparer implementation which is returned by the 
-    /// Equality.With() static (<see cref="Equality"/>) method to be used with linq expressions where
-    /// you need to supply an IEqualityComparer.
-    /// </summary>
-    /// <typeparam name="T">Type of objects being compared.</typeparam>
-    internal class GenericEqualityComparer<T> : EqualityComparer<T>
+    internal GenericEqualityComparer(Func<T?, T?, bool> equalsFunc)
     {
-        internal GenericEqualityComparer(Func<T, T, bool> equalsFunc)
-        {
-            _Equals = equalsFunc;
-        }
+        _Equals = equalsFunc;
+    }
 
-        internal GenericEqualityComparer(Func<T, T, bool> equalsFunc, Func<T, int> hashcodeFunc)
-        {
-            _Equals = equalsFunc;
-            _Hashcode = hashcodeFunc;
-        }
+    internal GenericEqualityComparer(Func<T?, T?, bool> equalsFunc, Func<T?, int> hashcodeFunc)
+    {
+        _Equals = equalsFunc;
+        _Hashcode = hashcodeFunc;
+    }
 
-        protected Func<T, T, bool> _Equals = (x, y) => x.Equals(y);
-        protected Func<T, int> _Hashcode = x => x.GetHashCode();
+    protected Func<T?, int> _Hashcode = x => x is not null ? x.GetHashCode() : default;
+    protected Func<T?, T?, bool> _Equals = (x, y) => x is not null && x.Equals(y);
 
-        public override bool Equals(T x, T y)
-        {
-            return _Equals(x, y);
-        }
+    public override bool Equals(T? x, T? y)
+    {
+        return _Equals(x, y);
+    }
 
-        public override int GetHashCode(T obj)
-        {
-            return _Hashcode(obj);
-        }
+    public override int GetHashCode(T? obj)
+    {
+        return _Hashcode(obj);
     }
 }
