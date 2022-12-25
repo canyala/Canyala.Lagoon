@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Functional\Comparison.cs~RF29a810.TMP" />
+  </ItemGroup>
+
 </Project>
