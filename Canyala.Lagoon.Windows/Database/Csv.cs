@@ -24,29 +24,22 @@
 //
 //-------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-
 using Canyala.Lagoon.Extensions;
 using Canyala.Lagoon.Text;
 
-namespace Canyala.Lagoon.Database
+namespace Canyala.Lagoon.Database;
+
+public class Csv
 {
-    public class Csv
-    {
-        public static IEnumerable<string[]> ReadLines(IEnumerable<string> lines, char commaCharacter = ',')
-            { foreach (var line in lines) yield return line.Split(commaCharacter); }
+    public static IEnumerable<string[]> ReadLines(IEnumerable<string> lines, char commaCharacter = ',')
+        { foreach (var line in lines) yield return line.Split(commaCharacter); }
 
-        public static IEnumerable<string[]> ReadText(string text, char commaCharacter = ',')
-            { return ReadLines(Analyzer.Lines(text), commaCharacter); }
+    public static IEnumerable<string[]> ReadText(string text, char commaCharacter = ',')
+        { return ReadLines(Analyzer.Lines(text), commaCharacter); }
 
-        public static IEnumerable<string[]> ReadFile(string path, char commaCharacter = ',')
-            { return ReadLines(File.ReadLines(path), commaCharacter); }
+    public static IEnumerable<string[]> ReadFile(string path, char commaCharacter = ',')
+        { return ReadLines(File.ReadLines(path), commaCharacter); }
 
-        public static void WriteFile(string path, IEnumerable<string[]> lines, char commaCharacter = ',')
-            { File.WriteAllLines(path, lines.Select(line => line.Join(commaCharacter))); }
-    }
+    public static void WriteFile(string path, IEnumerable<string[]> lines, char commaCharacter = ',')
+        { File.WriteAllLines(path, lines.Select(line => line.Join(commaCharacter))); }
 }

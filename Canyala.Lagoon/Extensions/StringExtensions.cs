@@ -5,7 +5,7 @@
 //  Copyright (c) 2012-2022 Canyala Innovation
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
+//  of this software and associated documentation files (the "Software"), to deal
 //  in the Software without restriction, including without limitation the rights
 //  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //  copies of the Software, and to permit persons to whom the Software is
@@ -287,7 +287,7 @@ public static class StringExtensions
         return builder.ToString();
     }
 
-    public static string Args(this string format, params object[] arguments)
+    public static string Args(this string format, params object?[] arguments)
     {
         return String.Format(format, arguments);
     }
@@ -326,7 +326,7 @@ public static class StringExtensions
         return s.Split(Seq.Array(split), StringSplitOptions.None);
     }
 
-    public static string Join(this IEnumerable<string> seqOfStrings, char separator)
+    public static string Join(this IEnumerable<string?> seqOfStrings, char separator)
     {
         var builder = new StringBuilder();
 
@@ -339,7 +339,7 @@ public static class StringExtensions
         return builder.ToString();
     }
 
-    public static string Join(this IEnumerable<string> seqOfStrings, string separator)
+    public static string Join(this IEnumerable<string?> seqOfStrings, string separator)
     {
         var builder = new StringBuilder();
 
@@ -354,41 +354,35 @@ public static class StringExtensions
 
     public static double AsDouble(this string text)
     {
-        double value = 0.0;
-        double.TryParse(text, out value);
+        _ = double.TryParse(text, out double value);
         return value;
     }
 
     public static bool IsDouble(this string text)
     {
-        double value = 0.0;
-        return double.TryParse(text, out value);
+        return double.TryParse(text, out double _);
     }
 
     public static long AsLong(this string text)
     {
-        long value = 0L;
-        long.TryParse(text, out value);
+        _ = long.TryParse(text, out long value);
         return value;
     }
 
     public static bool IsLong(this string text)
     {
-        long value = 0L;
-        return long.TryParse(text, out value);
+        return long.TryParse(text, out long _);
     }
 
     public static int AsInt(this string text)
     {
-        int value = 0;
-        int.TryParse(text, out value);
+        _ = int.TryParse(text, out int value);
         return value;
     }
 
     public static bool IsInt(this string text)
     {
-        int value = 0;
-        return int.TryParse(text, out value);
+        return int.TryParse(text, out int _);
     }
 
     public static bool Any(this string text, Predicate<char> predicate)

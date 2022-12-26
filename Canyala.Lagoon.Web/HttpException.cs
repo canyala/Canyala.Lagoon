@@ -24,22 +24,20 @@
 //
 //-------------------------------------------------------------------------------
 
-using System;
 
-namespace Canyala.Lagoon.Web
+namespace Canyala.Lagoon.Web;
+
+public class HttpException : Exception
 {
-    public class HttpException : Exception
+    public HttpStatus Status { get; private set; }
+
+    public HttpException(int code, string description)
     {
-        public HttpStatus Status { get; private set; }
+        Status = new HttpStatus(code, description);
+    }
 
-        public HttpException(int code, string description)
-        {
-            Status = new HttpStatus(code, description);
-        }
-
-        public HttpException(HttpStatus status)
-        {
-            Status = status;
-        }
+    public HttpException(HttpStatus status)
+    {
+        Status = status;
     }
 }

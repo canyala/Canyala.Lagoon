@@ -5,7 +5,7 @@
 //  Copyright (c) 2012-2022 Canyala Innovation
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
+//  of this software and associated documentation files (the "Software"), to deal
 //  in the Software without restriction, including without limitation the rights
 //  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //  copies of the Software, and to permit persons to whom the Software is
@@ -24,34 +24,28 @@
 //
 //------------------------------------------------------------------------------- 
 
-using System.Linq.Expressions;
+using LinqExpression = System.Linq.Expressions.Expression;
 
 namespace Canyala.Lagoon.Expressions;
 
-public class Compiler
+public class Compiled : Expression
 {
     static public double Evaluate(string expression, Symbols? symbols = null)
     {
-        symbols ??= new Symbols();
-
-        Parser parser = new Parser(expression, symbols);
-        Expression<Func<double>> lambdaExpression = Expression.Lambda<Func<double>>(parser.ExpressionTree);
+        Parser parser = new(expression, symbols ?? new Symbols());
+        var lambdaExpression = LinqExpression.Lambda<Func<double>>(parser.ExpressionTree);
         Func<double> compiledExpression = lambdaExpression.Compile();
         return compiledExpression();
     }
 
-    public Compiler(string expression, Symbols? symbols = null)
+    public Compiled(string expression, Symbols? symbols = null) : base(symbols)
     {
-        symbols ??= new Symbols();
-
-        Symbols = symbols;
-        Parser parser = new Parser(expression, symbols);
-        Expression<Func<double>> lambdaExpression = Expression.Lambda<Func<double>>(parser.ExpressionTree);
+        Parser parser = new(expression, Symbols);
+        var lambdaExpression = LinqExpression.Lambda<Func<double>>(parser.ExpressionTree);
         compiledExpression = lambdaExpression.Compile();
     }
 
-    public double Evaluate() { return compiledExpression(); } 
-    public Symbols Symbols { get; set; }
+    public override double Evaluate() { return compiledExpression(); } 
 
     private readonly Func<double> compiledExpression;
 }

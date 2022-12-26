@@ -25,40 +25,34 @@
 //-------------------------------------------------------------------------------
 
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.ComponentModel;
 
-namespace Canyala.Lagoon.Presentation
+namespace Canyala.Lagoon.Presentation;
+
+public interface IViewModel
 {
-    public interface IViewModel
+    IViewModel? Parent { get; }
+    void NotifyChanged(string name);
+}
+
+public class ViewModel<TParent> : IViewModel, INotifyPropertyChanged where TParent : IViewModel
+{
+    public event PropertyChangedEventHandler? PropertyChanged;
+    protected readonly dynamic State;
+    public readonly TParent? Parent;
+
+    public ViewModel()
+    { State = new PropertyManager(this); }
+
+    public ViewModel(TParent parent)
+        : this()
+    { Parent = parent; }
+
+    public void NotifyChanged(string propertyName)
     {
-        IViewModel Parent { get; }
-        void NotifyChanged(string name);
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    public class ViewModel<TParent> : IViewModel, INotifyPropertyChanged where TParent : IViewModel
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected readonly dynamic State;
-        public readonly TParent Parent;
-
-        public ViewModel()
-        { State = new PropertyManager(this); }
-
-        public ViewModel(TParent parent)
-            : this()
-        { Parent = parent; }
-
-        public void NotifyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        IViewModel IViewModel.Parent
-        { get { return this.Parent; } }
-    }
+    IViewModel? IViewModel.Parent
+    { get { return this.Parent; } }
 }

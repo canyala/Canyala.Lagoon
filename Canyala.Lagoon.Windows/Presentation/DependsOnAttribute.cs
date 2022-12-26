@@ -25,24 +25,18 @@
 //-------------------------------------------------------------------------------
 
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Canyala.Lagoon.Collections;
 
-namespace Canyala.Lagoon.Presentation
+namespace Canyala.Lagoon.Presentation;
+
+[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+public class DependsOnAttribute : Attribute
 {
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class DependsOnAttribute : Attribute
-    {
-        private readonly Bag<string> _dependsOn;
+    private readonly Bag<string> _dependsOn;
 
-        public bool HasDependencyOn(string name)
-            { return _dependsOn.Contains(name); }
+    public bool HasDependencyOn(string name)
+        { return _dependsOn.Contains(name); }
 
-        public DependsOnAttribute(params string[] propertyNameArguments)
-            { _dependsOn = new Bag<string>(propertyNameArguments); }
-    }
+    public DependsOnAttribute(params string[] propertyNameArguments)
+        { _dependsOn = new Bag<string>(propertyNameArguments); }
 }

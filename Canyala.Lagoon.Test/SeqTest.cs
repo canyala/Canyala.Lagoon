@@ -5,7 +5,7 @@
 //  Copyright (c) 2012-2022 Canyala Innovation
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
+//  of this software and associated documentation files (the "Software"), to deal
 //  in the Software without restriction, including without limitation the rights
 //  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //  copies of the Software, and to permit persons to whom the Software is
@@ -33,23 +33,22 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Canyala.Lagoon.Extensions;
 using Canyala.Lagoon.Functional;
 
-namespace Canyala.Lagoon.Test
-{
-    [TestClass]
-    public class SeqTest
-    {
-        [TestMethod]
-        public void SequencesShouldSupportFirstAndRest()
-        {
-            var reversed = ReverseList(1.UpTo(10));
-        }
+namespace Canyala.Lagoon.Test;
 
-        private static IEnumerable<T> ReverseList<T>(IEnumerable<T> seq)
-        {
-            if (seq.Any())
-                return Seq.Concat(ReverseList(seq.Rest()), seq.First());
-            else
-                return seq;
-        }
+[TestClass]
+public class SeqTest
+{
+    [TestMethod]
+    public void SequencesShouldSupportFirstAndRest()
+    {
+        var reversed = ReverseList(1.UpTo(10));
+    }
+
+    private static IEnumerable<T> ReverseList<T>(IEnumerable<T> seq)
+    {
+        if (seq.Any())
+            return Seq.Concat(ReverseList(seq.Rest()), seq.First());
+        else
+            return seq;
     }
 }

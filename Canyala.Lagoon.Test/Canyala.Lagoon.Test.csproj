@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MSTest.TestFramework" Version="3.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Canyala.Lagoon\Canyala.Lagoon.csproj" />
+  </ItemGroup>
+
 </Project>

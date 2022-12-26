@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="FluentMigrator.Runner.SqlServerCe" Version="3.3.2" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Canyala.Lagoon\Canyala.Lagoon.csproj" />
+  </ItemGroup>
+
 </Project>

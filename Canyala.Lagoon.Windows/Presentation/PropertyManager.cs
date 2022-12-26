@@ -25,79 +25,70 @@
 //-------------------------------------------------------------------------------
 
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Dynamic;
-using System.Linq;
-using System.Text;
 
-using Canyala.Lagoon.Extensions;
 using Canyala.Lagoon.Command;
+using Canyala.Lagoon.Extensions;
 
-namespace Canyala.Lagoon.Presentation
+namespace Canyala.Lagoon.Presentation;
+
+public class PropertyManager : DynamicObject
 {
-    public class PropertyManager : DynamicObject
+    private readonly IViewModel _viewModel;
+    private readonly Dictionary<string, object?> _properties = new();
+
+    internal PropertyManager(IViewModel viewModel)
+    { _viewModel = viewModel; }
+
+    public override bool TrySetMember(SetMemberBinder binder, object? value)
     {
-        private readonly IViewModel _viewModel;
-        private readonly Dictionary<string, object> _properties = new Dictionary<string, object>();
-
-        internal PropertyManager(IViewModel viewModel)
-        { _viewModel = viewModel; }
-
-        public override bool TrySetMember(SetMemberBinder binder, object value)
+        if (!_properties.ContainsKey(binder.Name))
         {
-            if (!_properties.ContainsKey(binder.Name))
-            {
-                _properties.Add(binder.Name, value);
-                return true;
-            }
-
-            if (_properties[binder.Name].Equals(value) == false)
-            {
-                _properties[binder.Name] = value;
-                _viewModel.NotifyChanged(binder.Name);
-                PropagateNotifyChanged(_viewModel, binder.Name);
-            }
-
+            _properties.Add(binder.Name, value);
             return true;
         }
 
-        public override bool TryGetMember(GetMemberBinder binder, out object result)
+        if (_properties[binder.Name]?.Equals(value) == false)
         {
-            if (_properties.TryGetValue(binder.Name, out result))
-                return true;
-
-            return false;
+            _properties[binder.Name] = value;
+            _viewModel.NotifyChanged(binder.Name);
+            PropagateNotifyChanged(_viewModel, binder.Name);
         }
 
-        private static void PropagateNotifyChanged(IViewModel viewModel, string propertyPath)
+        return true;
+    }
+
+    public override bool TryGetMember(GetMemberBinder binder, out object? result)
+    {
+        if (_properties.TryGetValue(binder.Name, out result))
+            return true;
+
+        return false;
+    }
+
+    private static void PropagateNotifyChanged(IViewModel viewModel, string propertyPath)
+    {
+        var modelType = viewModel.GetType();
+
+        foreach (var property in modelType.GetProperties())
         {
-            var modelType = viewModel.GetType();
-
-            foreach (var property in modelType.GetProperties())
+            foreach (var dependencyAttribute in property.GetCustomAttributes<DependsOnAttribute>())
             {
-                foreach (var dependencyAttribute in property.GetCustomAttributes<DependsOnAttribute>())
+                if (dependencyAttribute.HasDependencyOn(propertyPath))
                 {
-                    if (dependencyAttribute.HasDependencyOn(propertyPath))
+                    if (property.PropertyType.IsAssignableFrom(typeof(DelegateCommand)))
                     {
-                        if (property.PropertyType.IsAssignableFrom(typeof(DelegateCommand)))
-                        {
-                            var command = property.GetValue(viewModel, null) as DelegateCommand;
-                            if (command != null) command.RaiseCanExecute();
-                        }
-                        else
-                            viewModel.NotifyChanged(property.Name);
+                        if (property.GetValue(viewModel, null) is DelegateCommand command) command.RaiseCanExecute();
                     }
-
-                    if (viewModel.Parent != null)
-                        viewModel
-                            .Parent
-                            .GetType()
-                            .GetProperties()
-                            .Where(p => p.PropertyType == modelType)
-                            .Do(parentProperty => PropagateNotifyChanged(viewModel.Parent, "{0}.{1}".Args(parentProperty.Name, propertyPath)));
+                    else
+                        viewModel.NotifyChanged(property.Name);
                 }
+
+                viewModel.Parent?
+                    .GetType()
+                    .GetProperties()
+                    .Where(p => p.PropertyType == modelType)
+                    .Do(parentProperty => PropagateNotifyChanged(viewModel.Parent, "{0}.{1}".Args(parentProperty.Name, propertyPath)));
             }
         }
     }

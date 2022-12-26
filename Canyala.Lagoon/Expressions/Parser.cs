@@ -5,7 +5,7 @@
 //  Copyright (c) 2012-2022 Canyala Innovation
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
+//  of this software and associated documentation files (the "Software"), to deal
 //  in the Software without restriction, including without limitation the rights
 //  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //  copies of the Software, and to permit persons to whom the Software is
@@ -25,13 +25,13 @@
 //------------------------------------------------------------------------------- 
 
 using System.Globalization;
-using System.Linq.Expressions;
+using LinqExpression = System.Linq.Expressions.Expression;
 
 namespace Canyala.Lagoon.Expressions;
 
 internal class Parser
 {
-    internal Expression ExpressionTree { get; private set; }
+    internal LinqExpression ExpressionTree { get; private set; }
 
     internal Parser(string expression, Symbols symbols)
     {
@@ -43,14 +43,14 @@ internal class Parser
     private readonly Tokenizer Tokens;
     private readonly Symbols Symbols;
 
-    private Expression ParseExpression()
+    private LinqExpression ParseExpression()
     {
-        Expression? expression = null;
+        LinqExpression? expression = null;
 
         if (Tokens.Accept(token => token == "+"))
             expression = ParseTerm();
         else if (Tokens.Accept(token => token == "-"))
-            expression = Expression.Negate(ParseTerm());
+            expression = LinqExpression.Negate(ParseTerm());
         else
             expression = ParseTerm();
 
@@ -59,10 +59,10 @@ internal class Parser
             switch (Tokens.Read())
             {
                 case "+":
-                    expression = Expression.Add(expression, ParseTerm());
+                    expression = LinqExpression.Add(expression, ParseTerm());
                     break;
                 case "-":
-                    expression = Expression.Subtract(expression, ParseTerm());
+                    expression = LinqExpression.Subtract(expression, ParseTerm());
                     break;
             }
         }
@@ -70,19 +70,19 @@ internal class Parser
         return expression;
     }
 
-    private Expression ParseTerm()
+    private LinqExpression ParseTerm()
     {
-        Expression expression = ParseFactor();
+        var expression = ParseFactor();
 
         while (Tokens.Allow(token => token == "*" || token == "/"))
         {
             switch (Tokens.Read())
             {
                 case "*":
-                    expression = Expression.Multiply(expression, ParseFactor());
+                    expression = LinqExpression.Multiply(expression, ParseFactor());
                     break;
                 case "/":
-                    expression = Expression.Divide(expression, ParseFactor());
+                    expression = LinqExpression.Divide(expression, ParseFactor());
                     break;
             }
         }
@@ -90,9 +90,9 @@ internal class Parser
         return expression;
     }
 
-    private Expression ParseFactor()
+    private LinqExpression ParseFactor()
     {
-        Expression expression;
+        LinqExpression expression;
 
         if (Tokens.Accept(token => token == "("))
         {
@@ -103,12 +103,15 @@ internal class Parser
         {
             if (Tokens.Allow(token => char.IsDigit(token[0])))
             {
-                expression = Expression.Constant(Double.Parse(Tokens.Read(), CultureInfo.InvariantCulture.NumberFormat));
+                expression = LinqExpression.Constant(Double.Parse(Tokens.Read(), CultureInfo.InvariantCulture.NumberFormat));
             }
             else if (Tokens.Allow(token => char.IsLetter(token[0]) || token[0] == '?'))
             {
-                Expression[] argumentValues = { Expression.Constant(Tokens.Read()) };
-                expression = Expression.Call(Expression.Constant(Symbols), typeof(Symbols).GetMethod("ValueOf"), argumentValues);
+                LinqExpression[] argumentValues = { LinqExpression.Constant(Tokens.Read()) };
+
+                #pragma warning disable CS8604 // Possible null reference argument : MethodInfo method (compile will fail if the Symbols.ValueOf function is missing)
+                expression = LinqExpression.Call(LinqExpression.Constant(Symbols), typeof(Symbols).GetMethod(nameof(Symbols.ValueOf)), argumentValues);
+                #pragma warning restore CS8604 // Possible null reference argument.
             }
             else
             {

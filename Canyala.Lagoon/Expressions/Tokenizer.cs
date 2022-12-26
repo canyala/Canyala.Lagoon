@@ -5,7 +5,7 @@
 //  Copyright (c) 2012-2022 Canyala Innovation
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
+//  of this software and associated documentation files (the "Software"), to deal
 //  in the Software without restriction, including without limitation the rights
 //  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //  copies of the Software, and to permit persons to whom the Software is
@@ -27,70 +27,69 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace Canyala.Lagoon.Expressions
+namespace Canyala.Lagoon.Expressions;
+
+internal class Tokenizer
 {
-    internal class Tokenizer
+    private readonly Regex regEx;
+    private readonly MatchCollection matches;
+    private int currentMatch;
+
+    public Tokenizer(string expression, NumberFormatInfo numberFormatInfo)
     {
-        private readonly Regex regEx;
-        private readonly MatchCollection matches;
-        private int currentMatch;
+        string pattern = string.Format(@"(\d+{0}\d+)|(\d+)|(\?\w+)|(\w+)|([+\-*/])|(\()|(\))|([^\s]+)", RegExEscape(numberFormatInfo.NumberDecimalSeparator));
+        regEx = new Regex(pattern, RegexOptions.Singleline);
+        matches = regEx.Matches(expression);
+        Initialize();
+    }
 
-        public Tokenizer(string expression, NumberFormatInfo numberFormatInfo)
-        {
-            string pattern = string.Format(@"(\d+{0}\d+)|(\d+)|(\?\w+)|(\w+)|([+\-*/])|(\()|(\))|([^\s]+)", RegExEscape(numberFormatInfo.NumberDecimalSeparator));
-            regEx = new Regex(pattern, RegexOptions.Singleline);
-            matches = regEx.Matches(expression);
-            Initialize();
-        }
+    public Tokenizer(string expression) : this(expression, CultureInfo.InvariantCulture.NumberFormat)
+    {
+    }
 
-        public Tokenizer(string expression) : this(expression, CultureInfo.InvariantCulture.NumberFormat)
-        {
-        }
+    private static string RegExEscape(string s)
+    {
+        if (s == ".")
+            return @"\.";
+        else
+            return s;
+    }
 
-        private static string RegExEscape(string s)
-        {
-            if (s == ".")
-                return @"\.";
-            else
-                return s;
-        }
+    public void Initialize()
+    {
+        currentMatch = 0;
+    }
 
-        public void Initialize()
-        {
-            currentMatch = 0;
-        }
+    public void Expect(Predicate<string> predicate)
+    {
+        if (currentMatch >= matches.Count || predicate(matches[currentMatch++].Value))
+            throw new ArgumentException(string.Format("Illegal dynamic evaluate expression"));
+    }
 
-        public void Expect(Predicate<string> predicate)
-        {
-            if (currentMatch >= matches.Count || predicate(matches[currentMatch++].Value))
-                throw new ArgumentException(string.Format("Illegal dynamic evaluate expression"));
-        }
-
-        public bool Allow(Predicate<string> predicate)
-        {
-            if (currentMatch < matches.Count)
-                return predicate(matches[currentMatch].Value);
-            else
-                return false;
-        }
-
-        public bool Accept(Predicate<string> predicate)
-        {
-            if (currentMatch >= matches.Count) return false;
-
-            if (predicate(matches[currentMatch].Value))
-            {
-                currentMatch++;
-                return true;
-            }
-
+    public bool Allow(Predicate<string> predicate)
+    {
+        if (currentMatch < matches.Count)
+            return predicate(matches[currentMatch].Value);
+        else
             return false;
+    }
+
+    public bool Accept(Predicate<string> predicate)
+    {
+        if (currentMatch >= matches.Count) return false;
+
+        if (predicate(matches[currentMatch].Value))
+        {
+            currentMatch++;
+            return true;
         }
 
-        public string Read()
-        {
-            if (currentMatch >= matches.Count) return string.Empty;
-            return matches[currentMatch++].Value;
-        }
+        return false;
+    }
+
+    public string Read()
+    {
+        if (currentMatch >= matches.Count) return string.Empty;
+        return matches[currentMatch++].Value;
     }
 }

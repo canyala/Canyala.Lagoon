@@ -5,7 +5,7 @@
 //  Copyright (c) 2012-2022 Canyala Innovation
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
+//  of this software and associated documentation files (the "Software"), to deal
 //  in the Software without restriction, including without limitation the rights
 //  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //  copies of the Software, and to permit persons to whom the Software is
@@ -28,31 +28,28 @@ using System.Globalization;
 
 namespace Canyala.Lagoon.Expressions;
 
-public class Interpreter
+public class Interpreted : Expression
 {
     public static double Evaluate(string expression, Symbols? symbols = null)
     {
-        symbols ??= new Symbols();
-        Interpreter interpreter = new Interpreter(expression, symbols);
-        return interpreter.Evaluate();
+        Interpreted interpreted = new(expression, symbols ?? new Symbols());
+        return interpreted.Evaluate();
     }
 
-    public Interpreter(string expression, Symbols? symbols = null)
+    public Interpreted(string expression, Symbols? symbols = null) : base(symbols)
     {
-        Symbols = symbols ?? new Symbols();
         Tokens = new Tokenizer(expression);
     }
 
-    public double Evaluate()
+    public override double Evaluate()
     {
         Tokens.Initialize();
-        return InterpretValue();
+        return InterpretExpression();
     }
 
-    public Symbols Symbols { get; set; }
     private readonly Tokenizer Tokens;
 
-    private double InterpretValue()
+    private double InterpretExpression()
     {
         double value;
 
@@ -68,10 +65,10 @@ public class Interpreter
             switch (Tokens.Read())
             {
                 case "+":
-                    value = value + InterpretTerm();
+                    value += InterpretTerm();
                     break;
                 case "-":
-                    value = value - InterpretTerm();
+                    value -= InterpretTerm();
                     break;
             }
         }
@@ -88,10 +85,10 @@ public class Interpreter
             switch (Tokens.Read())
             {
                 case "*":
-                    value = value * InterpretFactor();
+                    value *= InterpretFactor();
                     break;
                 case "/":
-                    value = value / InterpretFactor();
+                    value /= InterpretFactor();
                     break;
             }
         }
@@ -105,7 +102,7 @@ public class Interpreter
 
         if (Tokens.Accept(token => token == "("))
         {
-            value = InterpretValue();
+            value = InterpretExpression();
             Tokens.Expect(token => token == ")");
         }
         else
@@ -120,7 +117,7 @@ public class Interpreter
             }
             else
             {
-                value = InterpretValue();
+                value = InterpretExpression();
             }
         }
 
