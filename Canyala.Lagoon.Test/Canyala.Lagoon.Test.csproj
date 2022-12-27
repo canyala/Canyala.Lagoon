@@ -14,4 +14,7 @@
     <ProjectReference Include="..\Canyala.Lagoon\Canyala.Lagoon.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Microsoft.VisualStudio.UnitTesting" />
+  </ItemGroup>
 </Project>
