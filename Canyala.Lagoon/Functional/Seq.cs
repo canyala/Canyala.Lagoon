@@ -256,7 +256,7 @@ public static class Seq
             sequence.Remove(item);
     }
 
-    public static bool DoWhile<TOne, TTwo>(IEnumerable<TOne> seqOne, IEnumerable<TTwo> seqTwo, Func<TOne, TTwo, bool> predicateAction)
+    public static bool DoWhile<TOne, TTwo>(IEnumerable<TOne?> seqOne, IEnumerable<TTwo?> seqTwo, Func<TOne?, TTwo?, bool> predicateAction)
     {
         var enumOne = seqOne.GetEnumerator();
         var enumTwo = seqTwo.GetEnumerator();

@@ -436,11 +436,10 @@ public static class StringExtensions
 
     public static string TrimAny(this string text, params string[] subStrings)
     {
-        string ignore;
-        return TrimAny(text, out ignore, subStrings);
+        return TrimAny(text, out _, subStrings);
     }
 
-    public static string TrimAny(this string text, out string match, params string[] subStrings)
+    public static string TrimAny(this string text, out string? match, params string[] subStrings)
     {
         match = null;
         foreach (var s in subStrings)
@@ -459,11 +458,10 @@ public static class StringExtensions
 
     public static string TrimStartAny(this string text, params string[] subStrings)
     {
-        string ignore;
-        return TrimStartAny(text, out ignore, subStrings);
+        return TrimStartAny(text, out _, subStrings);
     }
 
-    public static string TrimStartAny(this string text, out string match, params string[] subStrings)
+    public static string TrimStartAny(this string text, out string? match, params string[] subStrings)
     {
         match = null;
         foreach (var s in subStrings)
@@ -481,11 +479,10 @@ public static class StringExtensions
 
     public static string TrimEndAny(this string text, params string[] subStrings)
     {
-        string ignore;
-        return TrimEndAny(text, out ignore, subStrings);
+        return TrimEndAny(text, out _, subStrings);
     }
 
-    public static string TrimEndAny(this string text, out string match, params string[] subStrings)
+    public static string TrimEndAny(this string text, out string? match, params string[] subStrings)
     {
         match = null;
         foreach (var s in subStrings)
@@ -598,8 +595,8 @@ public static class StringExtensions
 
     public static string AsPercentDecoded(this string text)
     {
-        StringBuilder result = new StringBuilder();
-        List<byte> decodeBuffer = null;
+        StringBuilder result = new();
+        List<byte>? decodeBuffer = null;
 
         for (int i = 0; i < text.Length; i++)
         {

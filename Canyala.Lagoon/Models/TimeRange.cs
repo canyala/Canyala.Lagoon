@@ -223,6 +223,9 @@ public class TimeRange : IComparable<TimeRange>
 
     public int CompareTo(TimeRange? other)
     {
+        if (other is null)
+            throw new ArgumentNullException(nameof(other));
+
         if (From < other.From)
             return -1;
         else if (From > other.From)

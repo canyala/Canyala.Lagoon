@@ -29,7 +29,7 @@ using System.Collections;
 namespace Canyala.Lagoon.Functional;
 
 /// <summary>
-/// Static class to be used to generate a IComparer with custom behaviour
+/// Static class to be used to generate an IComparer with custom behaviour
 /// for LINQ expressions.
 /// </summary>
 /// <remarks>
@@ -44,23 +44,23 @@ public static class Comparison
     /// Returns a generic instance of the IComparer interface where
     /// the Compare() method calls the function given.
     /// </summary>
-    /// <typeparam name="T">Type of objects to compare</typeparam>
+    /// <typeparam name="TValue">Type of objects to compare</typeparam>
     /// <param name="func">The compare function to use.</param>
     /// <returns>New instance of the GenericComparer class using the function given.</returns>
-    public static IComparer<T> With<T>(Func<T, T, int> func)
+    public static IComparer<TValue?> With<TValue>(Func<TValue?, TValue?, int> func)
     {
-        return new GenericComparer<T>(func);
+        return new GenericComparer<TValue>(func);
     }
 
     /// <summary>
     /// Returns a instance of the IComparer interface where
     /// the Compare() method calls the function given.
     /// </summary>
-    /// <typeparam name="T">Type of objects to compare</typeparam>
+    /// <typeparam name="TValue">Type of objects to compare</typeparam>
     /// <param name="func">The compare function to use.</param>
     /// <returns>New instance of the GenericComparer class using the function given.</returns>
-    public static IComparer WithIComparer<T>(Func<T, T, int> func)
+    public static IComparer WithIComparer<TValue>(Func<TValue?, TValue?, int> func)
     {
-        return new GenericComparer<T>(func);
+        return new GenericComparer<TValue>(func);
     }
 }

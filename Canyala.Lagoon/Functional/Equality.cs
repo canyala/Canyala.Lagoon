@@ -42,24 +42,27 @@ public static class Equality
     /// Returns a new instance of an object implementing IEqualityComparer(T) where
     /// the Equals() method evalutates the function given.
     /// </summary>
-    /// <typeparam name="T">Type of objects to be compared.</typeparam>
+    /// <typeparam name="TValue">Type of objects to be compared.</typeparam>
     /// <param name="func">A function that performs the equality comparison.</param>
     /// <returns>A new instance of the GenericEqualityComparer class that uses
     /// the equality function for equality comparisons.</returns>
-    public static IEqualityComparer<T> With<T>(Func<T, T, bool> func) { return new GenericEqualityComparer<T>(func); }
+    public static IEqualityComparer<TValue?> With<TValue>(Func<TValue?, TValue?, bool> func) 
+    { 
+        return new GenericEqualityComparer<TValue>(func); 
+    }
 
     /// <summary>
     /// Returns a new instance of an object implementing IEqualityComparer(T) where
     /// the Equals() method evalutates the function given and the GetHashcode() method uses
     /// the hashcode function given.
     /// </summary>
-    /// <typeparam name="T">Type of objects to be compared.</typeparam>
+    /// <typeparam name="TValue">Type of objects to be compared.</typeparam>
     /// <param name="eqfunc">A function that performs the equality comparison.</param>
     /// <param name="hashfunc">A function that performs the hashcode calculation.</param>
     /// <returns>A new instance of the GenericEqualityComparer class that uses
     /// the equality and hashcode functions.</returns>
-    public static IEqualityComparer<T> With<T>(Func<T, T, bool> eqfunc, Func<T, int> hashfunc)
+    public static IEqualityComparer<TValue?> With<TValue>(Func<TValue?, TValue?, bool> eqfunc, Func<TValue?, int> hashfunc)
     {
-        return new GenericEqualityComparer<T>(eqfunc, hashfunc);
+        return new GenericEqualityComparer<TValue>(eqfunc, hashfunc);
     }
 }

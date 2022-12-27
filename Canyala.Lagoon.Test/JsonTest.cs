@@ -293,7 +293,7 @@ public class JsonTest
         var serialized = Json.Serialize(generic);
         var deserialized = Json.Deserialize<Generic<string>>(serialized);
 
-        Assert.AreEqual(generic.Property, deserialized.Property);
+        Assert.AreEqual(generic.Property, deserialized?.Property);
     }
 
     [TestMethod]

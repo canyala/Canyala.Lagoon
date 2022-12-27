@@ -338,8 +338,8 @@ public static class Json
     /// <typeparam name="TResult">The expected return type.</typeparam>
     /// <param name="text">A string in json format.</param>
     /// <returns>A deserialized object of type <code>TResult</code>.</returns>
-    public static TResult Deserialize<TResult>(string text)
-    { return (TResult)Json.Value.Parse(text.AsSubString()).ConvertTo(typeof(TResult)); }
+    public static TResult? Deserialize<TResult>(string text)
+    { return (TResult?)Json.Value.Parse(text.AsSubString()).ConvertTo(typeof(TResult?)); }
 
     /// <summary>
     /// Provides a representation for json values.
@@ -621,29 +621,26 @@ public static class Json
 
         public override object ConvertTo(Type baseType)
         {
-            Type type = null;
-            NameValue[] properties = null;
-            if (NameValuePairs.Length == 1 && NameValuePairs[0].Value is Object)
+            Type? type = null;
+            NameValue[]? properties = null;
+            if (NameValuePairs.Length == 1 && NameValuePairs[0].Value is Object @object)
             {
                 var assemblyQualifiedTypeName = NameValuePairs[0].Name.StaticValue;
 
                 if (IsAssemblyQualifiedTypeName(assemblyQualifiedTypeName))
                 {
-                    properties = ((Object)NameValuePairs[0].Value).NameValuePairs;
+                    properties = @object.NameValuePairs;
                     type = Type.GetType(assemblyQualifiedTypeName);
                 }
             }
 
-            if (type == null)
-            {
-                properties = NameValuePairs;
-                type = baseType;
-            }
+            type ??= baseType;
+            properties ??= NameValuePairs;
 
             var constructors = type
                 .GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 
-            var arguments = new object[properties.Length];
+            object?[] arguments = new object[properties.Length];
 
             foreach (var constructor in constructors)
             {
@@ -655,9 +652,10 @@ public static class Json
                 {
                     foreach (var parameter in parameters)
                     {
-                        var namedValue = properties.GetValueByName(parameter.Name, true);
-                        if (namedValue == null) continue;
+                        if (parameter.Name == null)
+                            continue;
 
+                        Value namedValue = properties.GetValueByName(parameter.Name, true);
                         arguments[parameter.Position] = namedValue.ConvertTo(parameter.ParameterType);
                     }
                 }
@@ -673,15 +671,23 @@ public static class Json
             {
                 // Let's try using the default constructor and properties.
                 var defaultConstructor = type.GetConstructor(Seq.Array<Type>());
-                var instance = defaultConstructor.Invoke(null);
 
-                foreach (var property in properties)
+                if (defaultConstructor != null)
                 {
-                    var propertyReference = type.GetProperty(property.Name.StaticValue);
-                    propertyReference.SetValue(instance, property.Value.ConvertTo(propertyReference.PropertyType));
-                }
+                    var instance = defaultConstructor.Invoke(null);
 
-                return instance;
+                    foreach (var property in properties)
+                    {
+                        var propertyReference = type.GetProperty(property.Name.StaticValue);
+
+                        if (propertyReference is null)
+                            throw new InvalidOperationException($"Json: {type.Name}.{property.Name.StaticValue} property not found.");
+
+                        propertyReference.SetValue(instance, property.Value.ConvertTo(propertyReference.PropertyType));
+                    }
+
+                    return instance;
+                }
             }
 
             throw new InvalidOperationException("Json: ctor {0}({1}) could not be found.".Args(type.Name, properties.Select(p => p.Name.StaticValue).Join(',')));
@@ -720,13 +726,17 @@ public static class Json
             return Json.New.Array(text.Trim(1, -1).Split(',').Select(part => Value.Parse(part)));
         }
 
-        public override object ConvertTo(Type type)
+        public override object? ConvertTo(Type type)
         {
             if (!(type.IsArray && type.HasElementType))
-                throw new InvalidCastException("A Json.Array can not be cast to a {0}.".Args(type.Name));
+                throw new InvalidCastException($"A Json.Array can not be cast to a {type.Name}.");
+
+            var rank = type.GetArrayRank();
 
             var elementType = type.GetElementType();
-            var rank = type.GetArrayRank();
+
+            if (elementType is null)
+                throw new InvalidProgramException($"A Json.Array can not be cast to a {type.Name} array, {nameof(elementType)} is null.");
 
             if (rank == 1)
             {
@@ -736,8 +746,8 @@ public static class Json
             }
             else
             {
-                var lengths = (int[])Values[0].ConvertTo(typeof(int[]));
-                var elements = (System.Array)Values[1].ConvertTo(elementType.MakeArrayType());
+                var lengths = (Values[0].ConvertTo(typeof(int[])) as int[]) ?? System.Array.Empty<int>();
+                var elements = (Values[1].ConvertTo(elementType.MakeArrayType()) as System.Array) ?? System.Array.CreateInstance(elementType, 0);
                 var array = System.Array.CreateInstance(elementType, lengths);
                 var indices = new int[rank];
 

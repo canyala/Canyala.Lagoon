@@ -29,7 +29,7 @@ namespace Canyala.Lagoon.Database;
 /// <summary>
 /// Provides a custom naming attribute for records and fields.
 /// </summary>
-[AttributeUsage(AttributeTargets.Property)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Field)]
 public class NameAttribute : Attribute
 {
     public string Name { get; private set; }

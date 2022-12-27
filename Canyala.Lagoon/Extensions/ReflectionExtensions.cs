@@ -126,8 +126,11 @@ public static class ReflectionExtensions
         return collection;
     }
 
-    public static bool SemanticEquals(this object x, object y)
+    public static bool SemanticEquals(this object? x, object? y)
     {
+        if (x is null || y is null)
+            return false;
+
         return !x
             .GetType()
             .GetSemanticProperties()
@@ -135,7 +138,7 @@ public static class ReflectionExtensions
             .Any(property => Equals(x.GetPropertyValue(property), y.GetPropertyValue(property)) == false);
     }
 
-    public static bool SemanticEquals<TOne, TTwo>(this IEnumerable<TOne> x, IEnumerable<TTwo> y)
+    public static bool SemanticEquals<TOne, TTwo>(this IEnumerable<TOne?> x, IEnumerable<TTwo?> y)
     {
         return Seq.DoWhile(x, y, (a, b) => a.SemanticEquals(b));
     }
