@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Canyala.Lagoon", "Canyala.Lagoon\Canyala.Lagoon.csproj", "{94C74023-32B9-4D6E-B86E-07DBE3AA18A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Canyala.Lagoon", "Canyala.Lagoon\Canyala.Lagoon.csproj", "{94C74023-32B9-4D6E-B86E-07DBE3AA18A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Canyala.Lagoon.Net", "Canyala.Lagoon.Net\Canyala.Lagoon.Net.csproj", "{1AAC1AC6-FC39-41D6-A571-1A6E18CA12C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Canyala.Lagoon.Net", "Canyala.Lagoon.Net\Canyala.Lagoon.Net.csproj", "{1AAC1AC6-FC39-41D6-A571-1A6E18CA12C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Canyala.Lagoon.Web", "Canyala.Lagoon.Web\Canyala.Lagoon.Web.csproj", "{F9FB683B-EAEA-4996-AFE9-DD87072D192C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Canyala.Lagoon.Web", "Canyala.Lagoon.Web\Canyala.Lagoon.Web.csproj", "{F9FB683B-EAEA-4996-AFE9-DD87072D192C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Canyala.Lagoon.Windows", "Canyala.Lagoon.Windows\Canyala.Lagoon.Windows.csproj", "{FBA13765-0484-4E0B-82A6-3DC5462E9051}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Canyala.Lagoon.Windows", "Canyala.Lagoon.Windows\Canyala.Lagoon.Windows.csproj", "{FBA13765-0484-4E0B-82A6-3DC5462E9051}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Canyala.Lagoon.Test", "Canyala.Lagoon.Test\Canyala.Lagoon.Test.csproj", "{C8A81E2D-3BF4-4380-B0D8-1F777302AF67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Canyala.Lagoon.Test", "Canyala.Lagoon.Test\Canyala.Lagoon.Test.csproj", "{C8A81E2D-3BF4-4380-B0D8-1F777302AF67}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
