@@ -171,9 +171,15 @@ public static class Json
         /// <param name="declaredType">Declared type.</param>
         /// <param name="clrObject">A class object instance.</param>
         /// <returns>A Json Object</returns>
-        static public Value Object(Type declaredType, object? clrObject)
+        static public Value Object(Type? declaredType, object? clrObject)
         {
-            var actualType = clrObject is not null ? clrObject.GetType() : declaredType;
+            if (clrObject is null)
+                throw new ArgumentNullException(nameof(clrObject));
+
+            var actualType = clrObject.GetType();
+
+            if (declaredType is null)
+                throw new ArgumentNullException(nameof(declaredType));
 
             if (!declaredType.IsAssignableFrom(actualType))
                 throw new InvalidCastException();
@@ -233,14 +239,14 @@ public static class Json
             var type = array.GetType();
 
             if (array.Rank == 1)
-                return Json.New.Array(array.Map(element => Json.New.Value(type.GetElementType() ?? typeof(Object), element)));
+                return Json.New.Array(array.Map(element => Json.New.Value(type.GetElementType(), element)));
 
             var lengths = new int[array.Rank];
             for (int dimension = 0; dimension < array.Rank; dimension++)
                 lengths[dimension] = array.GetLength(dimension);
 
             var dimensions = Json.New.Array(lengths.Map(length => Json.New.Value(typeof(int), length)));
-            var elements = Json.New.Array(array.Map(element => Json.New.Value(type.GetElementType() ?? typeof(Object), element)));
+            var elements = Json.New.Array(array.Map(element => Json.New.Value(type.GetElementType(), element)));
 
             return Json.New.Array(dimensions, elements);
         }
@@ -250,7 +256,7 @@ public static class Json
         /// </summary>
         /// <param name="clrObject">A clr object to create a Json Value from.</param>
         /// <returns>A Json Value</returns>
-        static public Value Value(Type declaredType, object? clrObject)
+        static public Value Value(Type? declaredType, object? clrObject)
         {
             if (clrObject == null)
                 return Json.New.Null;
@@ -502,7 +508,7 @@ public static class Json
     /// </summary>
     public sealed class Number : Value
     {
-        private SubString _value;
+        private readonly SubString _value;
         public string StaticValue
         { get { return _value.ToString(); } }
 
