@@ -335,8 +335,8 @@ public static class Json
     /// <typeparam name="T">The declared type of <code>clrObject</code></typeparam>
     /// <param name="clrObject">The object to serialize.</param>
     /// <returns>A string in json format.</returns>
-    public static string Serialize<T>(T clrObject)
-    { return New.Value(typeof(T), clrObject).ToString() ?? string.Empty; }
+    public static string? Serialize<T>(T clrObject)
+    { return New.Value(typeof(T), clrObject).ToString(); }
 
     /// <summary>
     /// Deserialize an object from json.
@@ -629,14 +629,15 @@ public static class Json
         {
             Type? type = null;
             NameValue[]? properties = null;
-            if (NameValuePairs.Length == 1 && NameValuePairs[0].Value is Object @object)
+
+            if (NameValuePairs.Length == 1 && NameValuePairs[0].Value is Json.Object @object)
             {
                 var assemblyQualifiedTypeName = NameValuePairs[0].Name.StaticValue;
 
                 if (IsAssemblyQualifiedTypeName(assemblyQualifiedTypeName))
                 {
-                    properties = @object.NameValuePairs;
                     type = Type.GetType(assemblyQualifiedTypeName);
+                    properties = @object.NameValuePairs;                    
                 }
             }
 
