@@ -344,8 +344,13 @@ public static class Json
     /// <typeparam name="TResult">The expected return type.</typeparam>
     /// <param name="text">A string in json format.</param>
     /// <returns>A deserialized object of type <code>TResult</code>.</returns>
-    public static TResult? Deserialize<TResult>(string text)
-    { return (TResult?)Json.Value.Parse(text.AsSubString()).ConvertTo(typeof(TResult?)); }
+    public static TResult? Deserialize<TResult>(string? text)
+    { 
+        if (text is null)
+            throw new ArgumentNullException(nameof(text));
+
+        return (TResult?) Json.Value.Parse(text.AsSubString()).ConvertTo(typeof(TResult?)); 
+    }
 
     /// <summary>
     /// Provides a representation for json values.
