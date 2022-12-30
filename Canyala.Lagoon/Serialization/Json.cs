@@ -106,7 +106,7 @@ public static class Json
         /// <param name="value">A clr datetimeoffset value.</param>
         /// <returns>A Json String.</returns>
         static public String String(DateTimeOffset dateTimeOffset)
-        { return new String(dateTimeOffset.ToString("yyyy-MM-ddThh:mm:ss.fffffffzzz", CultureInfo.InvariantCulture)); }
+        { return new String(dateTimeOffset.ToString("yyyy-MM-ddTHH:mm:ss.fffffffzzz", CultureInfo.InvariantCulture)); }
 
         /// <summary>
         /// Creates a Json Number object
@@ -490,10 +490,18 @@ public static class Json
                 return new Guid(StaticValue);
 
             if (type == typeof(DateTime))
-                return DateTime.ParseExact(StaticValue, "o", CultureInfo.InvariantCulture);
+            {
+                var dateTime = DateTime.ParseExact(StaticValue, "o", CultureInfo.InvariantCulture);
+
+                // ParseExact converts Utc to corresponding Local, convert it back
+                if (StaticValue.EndsWith('Z') && dateTime.Kind == DateTimeKind.Local)
+                    dateTime = dateTime.ToUniversalTime(); // Convert to DateTimeKind.Utc
+
+                return dateTime;
+            }
 
             if (type == typeof(DateTimeOffset))
-                return DateTimeOffset.ParseExact(StaticValue, "yyyy-MM-ddThh:mm:ss.fffffffzzz", CultureInfo.InvariantCulture);
+                return DateTimeOffset.ParseExact(StaticValue, "yyyy-MM-ddTHH:mm:ss.fffffffzzz", CultureInfo.InvariantCulture);
 
             if (type == typeof(TimeSpan))
                 return TimeSpan.Parse(StaticValue);

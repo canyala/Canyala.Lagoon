@@ -25,17 +25,12 @@
 //------------------------------------------------------------------------------- 
 
 
-using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using Canyala.Lagoon.Extensions;
+using Canyala.Lagoon.Functional;
 using Canyala.Lagoon.Serialization;
 using Canyala.Lagoon.Text;
-using Canyala.Lagoon.Functional;
-using System.Reflection;
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Canyala.Lagoon.Test;
 
@@ -55,7 +50,7 @@ public class JsonTest
         examples.Do(example => Assert.AreEqual(example, Json.Object.Parse(new SubString(example)).ToString())); 
     }
 
-    class JaggedArrayMessage
+    class JaggedArrayMessage : IEquatable<JaggedArrayMessage?>
     {
         public readonly double[][] Data;
         public readonly DateTime StartDate;
@@ -72,6 +67,35 @@ public class JsonTest
 
         internal static JaggedArrayMessage FromData(double[][] data, DateTime startDate, DateTimeOffset startEvent, Guid messageId)
         { return new JaggedArrayMessage(data, startDate, startEvent, messageId); }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as JaggedArrayMessage);
+        }
+
+        public bool Equals(JaggedArrayMessage? other)
+        {
+            return other is not null &&
+                   Data.SequenceOfSequencesEqual(other.Data) &&
+                   StartDate == other.StartDate &&
+                   StartEvent.Equals(other.StartEvent) &&
+                   MessageId.Equals(other.MessageId);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Data, StartDate, StartEvent, MessageId);
+        }
+
+        public static bool operator ==(JaggedArrayMessage? left, JaggedArrayMessage? right)
+        {
+            return EqualityComparer<JaggedArrayMessage>.Default.Equals(left, right);
+        }
+
+        public static bool operator !=(JaggedArrayMessage? left, JaggedArrayMessage? right)
+        {
+            return !(left == right);
+        }
     }
 
     static readonly double[][] JaggedArrayData =
@@ -81,7 +105,7 @@ public class JsonTest
     };
 
     [TestMethod]
-    public void SerializeAndDeserializeOfJaggedArrays()
+    public void SerializeAndDeserializeOfJaggedArraysWithUtcTimes()
     {
         var message = JaggedArrayMessage.FromData(JaggedArrayData, DateTime.UtcNow, DateTimeOffset.UtcNow, Guid.NewGuid());
         var serialized = Json.Serialize(message);
@@ -90,7 +114,17 @@ public class JsonTest
         Assert.AreEqual(message, deserialized);
     }
 
-    class ArrayMessage
+    [TestMethod]
+    public void SerializeAndDeserializeOfJaggedArraysWithLocalTimes()
+    {
+        var message = JaggedArrayMessage.FromData(JaggedArrayData, DateTime.Now, DateTimeOffset.Now, Guid.NewGuid());
+        var serialized = Json.Serialize(message);
+        var deserialized = Json.Deserialize<JaggedArrayMessage>(serialized);
+
+        Assert.AreEqual(message, deserialized);
+    }
+
+    class ArrayMessage : IEquatable<ArrayMessage?>
     {
         public readonly string Name;
         public readonly double[,] Data;
@@ -110,6 +144,36 @@ public class JsonTest
 
         internal static ArrayMessage FromData(string name, double[,] data, TimeSpan elapsedTime, bool state1, bool state2)
             { return new ArrayMessage(name, data, elapsedTime, state1, state2); }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as ArrayMessage);
+        }
+
+        public bool Equals(ArrayMessage? other)
+        {
+            return other is not null &&
+                   Name == other.Name &&
+                   Data.ArrayEquals(other.Data) &&
+                   ElapsedTime.Equals(other.ElapsedTime) &&
+                   State1 == other.State1 &&
+                   State2 == other.State2;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, Data, ElapsedTime, State1, State2);
+        }
+
+        public static bool operator ==(ArrayMessage? left, ArrayMessage? right)
+        {
+            return EqualityComparer<ArrayMessage>.Default.Equals(left, right);
+        }
+
+        public static bool operator !=(ArrayMessage? left, ArrayMessage? right)
+        {
+            return !(left == right);
+        }
     }
 
     static readonly double[,] ArrayData =
@@ -128,8 +192,22 @@ public class JsonTest
         Assert.AreEqual(message, deserialized);
     }
 
-    class EmptyMessage
+    class EmptyMessage 
     {
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as EmptyMessage);
+        }
+
+        public bool Equals(EmptyMessage? other)
+        {
+            return other is not null;
+        }
+
+        public override int GetHashCode()
+        {
+            return 0;
+        }
     }
 
     [TestMethod]
@@ -138,6 +216,8 @@ public class JsonTest
         var message = new EmptyMessage();
         var serialized = Json.Serialize(message);
         var deserialized = Json.Deserialize<EmptyMessage>(serialized);
+
+        bool result = message.Equals(deserialized);
 
         Assert.AreEqual(message, deserialized);
     }
@@ -176,10 +256,8 @@ public class JsonTest
 
         public override bool Equals(object? obj)
         {
-            return obj is DerivedInnerMessage message &&
-                   base.Equals(obj) &&
-                   Inner == message.Inner &&
-                   DerivedInner == message.DerivedInner;
+            return obj is DerivedInnerMessage message && base.Equals(obj) &&
+               DerivedInner == message.DerivedInner;
         }
 
         public override int GetHashCode()
@@ -215,15 +293,15 @@ public class JsonTest
         public override bool Equals(object? obj)
         {
             return obj is OuterMessage message &&
-                   EqualityComparer<InnerMessage[]>.Default.Equals(InnerMessageArray, message.InnerMessageArray) &&
-                   EqualityComparer<InnerMessage>.Default.Equals(InnerMessage, message.InnerMessage) &&
+                   InnerMessageArray.SequenceEqual(message.InnerMessageArray) &&
+                   InnerMessage.Equals(message.InnerMessage) &&
                    Name == message.Name &&
                    Value == message.Value;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(InnerMessageArray, InnerMessage , Value, Name);
+            return HashCode.Combine(InnerMessageArray.SequenceHashCode(InnerMessageArray.Length), InnerMessage , Value, Name);
         }
 
     }
@@ -282,6 +360,18 @@ public class JsonTest
             Name = name;
             Age = age;
         }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Person person &&
+                   Name == person.Name &&
+                   Age == person.Age;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, Age);
+        }
     }
 
     public class Employee : Person
@@ -293,6 +383,18 @@ public class JsonTest
         {
             Apartment = apartment;
         }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Employee employee &&
+               Apartment == employee.Apartment &&
+               base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode(), Apartment);
+        }
     }
 
     [TestMethod]
@@ -302,7 +404,7 @@ public class JsonTest
         var serialized = Json.Serialize(person);
         var deserialized = Json.Deserialize<Person>(serialized);
 
-        //Assert.AreEqual(person, deserialized);
+        Assert.AreEqual(person, deserialized);
     }
 
     [TestMethod]
@@ -312,7 +414,7 @@ public class JsonTest
         var serialized = Json.Serialize(person);
         var deserialized = Json.Deserialize<Person>(serialized);
 
-        //Assert.AreEqual(person, deserialized);
+        Assert.AreEqual(person, deserialized);
     }
 
     public class Generic<T>
@@ -324,6 +426,16 @@ public class JsonTest
             Property = property;
         }
 
+        public override bool Equals(object? obj)
+        {
+            return obj is Generic<T> generic &&
+                   EqualityComparer<T>.Default.Equals(Property, generic.Property);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Property);
+        }
     }
 
     [TestMethod]
@@ -362,7 +474,7 @@ public class JsonTest
     {
     }
 
-    class Derived : Base
+    class Derived : Base, IEquatable<Derived?>
     {
         public readonly DateTime TimeStamp;
         public readonly double Value;
@@ -371,6 +483,33 @@ public class JsonTest
         {
             TimeStamp = timeStamp;
             Value = value;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as Derived);
+        }
+
+        public bool Equals(Derived? other)
+        {
+            return other is not null &&
+                   TimeStamp == other.TimeStamp &&
+                   Value == other.Value;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(TimeStamp, Value);
+        }
+
+        public static bool operator ==(Derived? left, Derived? right)
+        {
+            return left is not null && left.Equals(right);
+        }
+
+        public static bool operator !=(Derived? left, Derived? right)
+        {
+            return !(left == right);
         }
     }
 
@@ -392,15 +531,44 @@ public class JsonTest
         var serialized = Json.Serialize(samples);
         var deserialized = Json.Deserialize<Tuple<DateTime,double>[]>(serialized);
 
-        //Assert.AreEqual(samples, deserialized);
+        CollectionAssert.AreEqual(samples, deserialized);
     }
 
-    public class RegisterModel
+    public class RegisterModel : IEquatable<RegisterModel?>
     {
         public string? Name { get; set; }
         public string? Company { get; set; }
         public string? Department { get; set; }
         public string? Mail { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as RegisterModel);
+        }
+
+        public bool Equals(RegisterModel? other)
+        {
+            return other is not null &&
+                   Name == other.Name &&
+                   Company == other.Company &&
+                   Department == other.Department &&
+                   Mail == other.Mail;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, Company, Department, Mail);
+        }
+
+        public static bool operator ==(RegisterModel? left, RegisterModel? right)
+        {
+            return left is not null && left.Equals(right);
+        }
+
+        public static bool operator !=(RegisterModel? left, RegisterModel? right)
+        {
+            return !(left == right);
+        }
     }
 
     [TestMethod]
@@ -417,7 +585,7 @@ public class JsonTest
         var serialized = Json.Serialize(registerModel);
         var deserialized = Json.Deserialize<RegisterModel>(serialized);
 
-        //Assert.AreEqual(registerModel, deserialized);
+        Assert.AreEqual(registerModel, deserialized);
     }
 
     [TestMethod]
@@ -435,6 +603,6 @@ public class JsonTest
         var serialized = Json.Serialize(registerModelArray);
         var deserialized = Json.Deserialize<RegisterModel[]>(serialized);
 
-        //Assert.AreEqual(registerModelArray, deserialized);
+        CollectionAssert.AreEqual(registerModelArray, deserialized);
     }
 }

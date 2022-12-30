@@ -506,12 +506,89 @@ public static class SequenceExtensions
     /// <param name="seq">the sequence</param>
     /// <param name="maxElementsToUse">maximum elements to use</param>
     /// <returns>aggregated hashcode</returns>
-    public static int GetHashCode<T>(this IEnumerable<T> seq, int maxElementsToUse) where T : notnull
+    public static int SequenceHashCode<T>(this IEnumerable<T> seq, int maxElementsToUse) where T : notnull
     {
         var elements = seq.Take(maxElementsToUse);
+
         int hash = 0;
-        elements.Do(item => hash = 27 * hash + (item is not null ? item.GetHashCode() : 0));
+        elements.Do(item => hash = hash.RotateLeft(2) + (item is not null ? item.GetHashCode() : 0));
         return hash;
+    }
+
+    /// <summary>
+    /// Makes a value comparison of between sequence of sequences.
+    /// </summary>
+    /// <typeparam name="T">type of elements in the sequence of sequences</typeparam>
+    /// <param name="thisSeq"></param>
+    /// <param name="otherSeq"></param>
+    /// <returns>true if the sequences ae equal, otherwise false</returns>
+    public static bool SequenceOfSequencesEqual<T>(this T[][] thisSeq, T[][] otherSeq)
+    {
+        if (thisSeq.Length != otherSeq.Length) 
+            return false;
+
+        for (int i=0; i<thisSeq.Length; i++)
+        {
+            var atThisSeq = thisSeq[i];
+            var atOtherSeq = otherSeq[i];
+
+            if (atThisSeq.Length != atOtherSeq.Length) 
+                return false;
+
+            if (!atThisSeq.SequenceEqual(atOtherSeq)) 
+                return false;
+        }
+
+        return true;
+    }
+
+    public static bool ArrayEquals(this double[,] thisArray, double[,] thatArray)
+    {
+        if (thisArray.Rank != thatArray.Rank)
+            return false;
+
+        for (int dimension = 0; dimension < thisArray.Rank; dimension++)
+            if (thisArray.GetLength(dimension) != thatArray.GetLength(dimension)) 
+                return false;
+
+        int minRow = thisArray.GetLowerBound(0);
+        int maxRow = thisArray.GetUpperBound(0);
+
+        int minCol = thisArray.GetLowerBound(1);
+        int maxCol = thisArray.GetUpperBound(1);
+
+        for (int row = minRow; row <= maxRow; row++)
+        {
+            for (int col = minCol; col <= maxCol; col++)
+            {
+                if (thisArray[row, col] != thatArray[row, col])
+                    return false;
+
+            }
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Generates index arrays for multi dimensional arrays
+    /// </summary>
+    /// <param name="sizes"><Array of size for each dimension</param>
+    /// <returns>A generated sequence of int[]</returns>
+    public static IEnumerable<int[]> GenerateIndices(int[] sizes)
+    {
+        int[] indices = Seq.Array<int>(sizes.Length, 0);
+        
+        int i = 0;
+
+        while (i < indices.Length)
+        {
+            yield return indices;
+
+            i = 0;
+            while (i < indices.Length && ++indices[i] == sizes[i])
+                indices[i++] = 0;
+        }
     }
 
     public static bool IsEmpty<T>(this IEnumerable<T> seq)
