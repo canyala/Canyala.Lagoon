@@ -33,7 +33,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Canyala.Lagoon.Extensions;
 using Canyala.Lagoon.Functional;
 
-namespace Canyala.Lagoon.Test;
+namespace Canyala.Lagoon.Test.All;
 
 [TestClass]
 public class SeqTest

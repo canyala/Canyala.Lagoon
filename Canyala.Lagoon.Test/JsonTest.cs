@@ -32,7 +32,7 @@ using Canyala.Lagoon.Text;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace Canyala.Lagoon.Test;
+namespace Canyala.Lagoon.Test.All;
 
 [TestClass]
 public class JsonTest

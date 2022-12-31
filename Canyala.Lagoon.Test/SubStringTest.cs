@@ -29,7 +29,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Canyala.Lagoon.Text;
 using Canyala.Lagoon.Extensions;
 
-namespace Canyala.Lagoon.Test;
+namespace Canyala.Lagoon.Test.All;
 
 [TestClass]
 public class SubStringTest

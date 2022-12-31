@@ -30,7 +30,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Canyala.Lagoon.Extensions;
 using Canyala.Lagoon.Text;
 
-namespace Canyala.Lagoon.Test;
+namespace Canyala.Lagoon.Test.All;
 
 [TestClass]
 public class AnalyzerTest

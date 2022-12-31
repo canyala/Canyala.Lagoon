@@ -29,7 +29,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Canyala.Lagoon.Expressions;
 
-namespace Canyala.Lagoon.Test;
+namespace Canyala.Lagoon.Test.All;
 
 [TestClass]
 public class ExpressionsTest

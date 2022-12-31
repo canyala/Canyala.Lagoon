@@ -31,7 +31,7 @@ using Canyala.Lagoon.Extensions;
 using Canyala.Lagoon.Models;
       
 
-namespace Canyala.Lagoon.Test;
+namespace Canyala.Lagoon.Test.All;
 
 [TestClass]
 public class TimeRangeTest

@@ -36,7 +36,7 @@ using Canyala.Lagoon.Serialization;
 using Canyala.Lagoon.Text;
 using Canyala.Lagoon.Functional;
 
-namespace Canyala.Lagoon.Test;
+namespace Canyala.Lagoon.Test.All;
 
 /// <summary>
 /// Summary description for PoshTest
