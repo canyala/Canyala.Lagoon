@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Canyala.Lagoon\Canyala.Lagoon.csproj">
+    <ProjectReference Include="..\Canyala.Lagoon.Core\Canyala.Lagoon.Core.csproj">
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
