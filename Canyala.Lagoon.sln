@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Canyala.Lagoon", "Canyala.Lagoon.Core\Canyala.Lagoon.Core.csproj", "{94C74023-32B9-4D6E-B86E-07DBE3AA18A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Canyala.Lagoon.Core", "Canyala.Lagoon.Core\Canyala.Lagoon.Core.csproj", "{94C74023-32B9-4D6E-B86E-07DBE3AA18A3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Canyala.Lagoon.Net", "Canyala.Lagoon.Net\Canyala.Lagoon.Net.csproj", "{1AAC1AC6-FC39-41D6-A571-1A6E18CA12C3}"
 EndProject
@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Canyala.Lagoon.Windows", "C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Canyala.Lagoon.Test", "Canyala.Lagoon.Test\Canyala.Lagoon.Test.csproj", "{C8A81E2D-3BF4-4380-B0D8-1F777302AF67}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{A2723312-7D3B-41D8-BED3-D27F85628A88}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documentation", "documentation", "{A2723312-7D3B-41D8-BED3-D27F85628A88}"
 	ProjectSection(SolutionItems) = preProject
 		LICENSE = LICENSE
 		README.md = README.md
