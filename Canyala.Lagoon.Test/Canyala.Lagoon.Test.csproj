@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -14,12 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Canyala.Lagoon.Core\Canyala.Lagoon.Core.csproj">
-      <Private>False</Private>
-    </ProjectReference>
+    <None Remove="Microsoft.VisualStudio.UnitTesting" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Microsoft.VisualStudio.UnitTesting" />
+    <ProjectReference Include="..\Canyala.Lagoon.Core\Canyala.Lagoon.Core.csproj" />
   </ItemGroup>
 </Project>
