@@ -28,7 +28,7 @@ using System.Reflection;
 
 using Canyala.Lagoon.Core.Functional;
 
-namespace Canyala.Lagoon.Reflection;
+namespace Canyala.Lagoon.Core.Reflection;
 
 static public class SemanticMethodExtensions
 {
