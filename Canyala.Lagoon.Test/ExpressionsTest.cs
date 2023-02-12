@@ -27,7 +27,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using Canyala.Lagoon.Expressions;
+using Canyala.Lagoon.Core.Expressions;
 
 namespace Canyala.Lagoon.Test.All;
 

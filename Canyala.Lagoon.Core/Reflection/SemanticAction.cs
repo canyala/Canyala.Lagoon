@@ -26,7 +26,7 @@
 
 using System.Reflection;
 
-using Canyala.Lagoon.Functional;
+using Canyala.Lagoon.Core.Functional;
 
 namespace Canyala.Lagoon.Reflection;
 

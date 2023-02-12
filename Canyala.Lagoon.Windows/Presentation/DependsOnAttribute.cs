@@ -25,9 +25,9 @@
 //-------------------------------------------------------------------------------
 
 
-using Canyala.Lagoon.Collections;
+using Canyala.Lagoon.Core.Collections;
 
-namespace Canyala.Lagoon.Presentation;
+namespace Canyala.Lagoon.Windows.Presentation;
 
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
 public class DependsOnAttribute : Attribute

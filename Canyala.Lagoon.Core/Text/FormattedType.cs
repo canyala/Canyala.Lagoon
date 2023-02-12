@@ -24,7 +24,7 @@
 //
 //------------------------------------------------------------------------------- 
 
-namespace Canyala.Lagoon.Text;
+namespace Canyala.Lagoon.Core.Text;
 
 public class FormattedType
 {

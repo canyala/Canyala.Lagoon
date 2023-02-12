@@ -24,7 +24,7 @@
 //
 //------------------------------------------------------------------------------- 
 
-namespace Canyala.Lagoon.Expressions;
+namespace Canyala.Lagoon.Core.Expressions;
 
 public class Symbols
 {

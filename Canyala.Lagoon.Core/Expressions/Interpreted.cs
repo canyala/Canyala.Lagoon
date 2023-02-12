@@ -26,7 +26,7 @@
 
 using System.Globalization;
 
-namespace Canyala.Lagoon.Expressions;
+namespace Canyala.Lagoon.Core.Expressions;
 
 public class Interpreted : Expression
 {

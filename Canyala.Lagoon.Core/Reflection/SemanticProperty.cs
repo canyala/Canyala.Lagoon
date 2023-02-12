@@ -26,7 +26,7 @@
 
 using System.Reflection;
 
-namespace Canyala.Lagoon.Reflection;
+namespace Canyala.Lagoon.Core.Reflection;
 
 /// <summary>
 /// SemanticProperty provides a type representing properties with a semantic meaning.

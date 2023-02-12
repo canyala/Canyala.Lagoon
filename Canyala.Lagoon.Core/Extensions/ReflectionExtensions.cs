@@ -27,10 +27,10 @@
 using System.Reflection;
 using System.Text;
 
-using Canyala.Lagoon.Functional;
-using Canyala.Lagoon.Reflection;
+using Canyala.Lagoon.Core.Functional;
+using Canyala.Lagoon.Core.Reflection;
 
-namespace Canyala.Lagoon.Extensions;
+namespace Canyala.Lagoon.Core.Extensions;
 
 public static class ReflectionExtensions
 {

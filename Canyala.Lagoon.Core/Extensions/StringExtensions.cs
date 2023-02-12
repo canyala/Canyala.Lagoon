@@ -27,10 +27,10 @@
 using System.Globalization;
 using System.Text;
 
-using Canyala.Lagoon.Functional;
-using Canyala.Lagoon.Text;
+using Canyala.Lagoon.Core.Functional;
+using Canyala.Lagoon.Core.Text;
 
-namespace Canyala.Lagoon.Extensions;
+namespace Canyala.Lagoon.Core.Extensions;
 
 public static class StringExtensions
 {

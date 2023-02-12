@@ -24,7 +24,7 @@
 //
 //------------------------------------------------------------------------------- 
 
-namespace Canyala.Lagoon.Text;
+namespace Canyala.Lagoon.Core.Text;
 
 /// <summary>
 /// Provides an immutable substring implementation that avoids

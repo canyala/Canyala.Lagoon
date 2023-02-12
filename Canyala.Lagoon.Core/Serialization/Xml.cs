@@ -24,8 +24,9 @@
 //
 //------------------------------------------------------------------------------- 
 
-namespace Canyala.Lagoon.Serialization;
+namespace Canyala.Lagoon.Core.Serialization;
 
 class Xml
 {
+    // TODO: Implement
 }

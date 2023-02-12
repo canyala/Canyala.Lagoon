@@ -26,7 +26,7 @@
 
 using System.Text;
 
-namespace Canyala.Lagoon.Models;
+namespace Canyala.Lagoon.Core.Models;
 
 public enum LatitudeDirection { Empty, North, South };
 public enum LongitudeDirection { Empty, East, West };

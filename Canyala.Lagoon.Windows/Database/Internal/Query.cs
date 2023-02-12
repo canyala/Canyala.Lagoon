@@ -30,10 +30,10 @@ using System.Linq.Expressions;
 using System.Globalization;
 using System.Reflection;
 
-using Canyala.Lagoon.Extensions;
-using Canyala.Lagoon.Functional;
+using Canyala.Lagoon.Core.Extensions;
+using Canyala.Lagoon.Core.Functional;
 
-namespace Canyala.Lagoon.Database.Internal;
+namespace Canyala.Lagoon.Windows.Database.Internal;
 
 /// <summary>
 /// Provides logic for generating sql.

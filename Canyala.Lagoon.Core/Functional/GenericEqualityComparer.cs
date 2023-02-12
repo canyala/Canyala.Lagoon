@@ -24,7 +24,7 @@
 //
 //------------------------------------------------------------------------------- 
 
-namespace Canyala.Lagoon.Functional;
+namespace Canyala.Lagoon.Core.Functional;
 
 /// <summary>
 /// Generic equality comparer implementation which is returned by the 

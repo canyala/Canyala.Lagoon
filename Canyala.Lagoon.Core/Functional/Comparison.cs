@@ -26,7 +26,7 @@
 
 using System.Collections;
 
-namespace Canyala.Lagoon.Functional;
+namespace Canyala.Lagoon.Core.Functional;
 
 /// <summary>
 /// Static class to be used to generate an IComparer with custom behaviour

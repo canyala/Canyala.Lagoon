@@ -24,7 +24,7 @@
 //
 //------------------------------------------------------------------------------- 
 
-namespace Canyala.Lagoon.Contracts;
+namespace Canyala.Lagoon.Core.Contracts;
 
 public class ContractFailedException : Exception
 {

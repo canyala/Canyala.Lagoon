@@ -24,7 +24,7 @@
 //
 //------------------------------------------------------------------------------- 
 
-namespace Canyala.Lagoon.Extensions;
+namespace Canyala.Lagoon.Core.Extensions;
 
 /// <summary>
 /// 

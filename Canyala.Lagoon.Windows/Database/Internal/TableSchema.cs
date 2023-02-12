@@ -24,7 +24,7 @@
 //
 //-------------------------------------------------------------------------------
 
-namespace Canyala.Lagoon.Database.Internal;
+namespace Canyala.Lagoon.Windows.Database.Internal;
 
 [Name("information_schema.tables")]
 internal class Table

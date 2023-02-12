@@ -26,7 +26,7 @@
 
 using System.Collections;
 
-namespace Canyala.Lagoon.Functional;
+namespace Canyala.Lagoon.Core.Functional;
 
 public class GenericComparer<T> : Comparer<T?>, IComparer
 {

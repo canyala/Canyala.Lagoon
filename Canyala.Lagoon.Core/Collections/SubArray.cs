@@ -24,7 +24,7 @@
 //
 //------------------------------------------------------------------------------- 
 
-namespace Canyala.Lagoon.Collections;
+namespace Canyala.Lagoon.Core.Collections;
 
 public class SubArray<TValue> : IEnumerable<TValue>
     where TValue : notnull

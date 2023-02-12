@@ -28,7 +28,8 @@
 using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
 
-namespace Canyala.Lagoon.Extensions;
+using Canyala.Lagoon.Core.Extensions;
+namespace Canyala.Lagoon.Windows.Extensions;
 
 public static class ExpressionExtensions
 {

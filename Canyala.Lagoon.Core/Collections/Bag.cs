@@ -24,9 +24,9 @@
 //
 //------------------------------------------------------------------------------- 
 
-using Canyala.Lagoon.Extensions;
+using Canyala.Lagoon.Core.Extensions;
 
-namespace Canyala.Lagoon.Collections;
+namespace Canyala.Lagoon.Core.Collections;
 
 public class Bag<TKey> : IEnumerable<KeyValuePair<TKey, int>>
     where TKey : notnull

@@ -28,7 +28,7 @@
 using System.Reflection;
 using System.Text;
 
-namespace Canyala.Lagoon.Reflection;
+namespace Canyala.Lagoon.Windows.Reflection;
 
 /// <summary>
 /// Provides a simple api for accessing fields, properties, indexers and method calls dynamically on

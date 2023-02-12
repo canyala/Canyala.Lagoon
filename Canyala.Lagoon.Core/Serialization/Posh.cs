@@ -24,9 +24,9 @@
 //
 //------------------------------------------------------------------------------- 
 
-using Canyala.Lagoon.Extensions;
+using Canyala.Lagoon.Core.Extensions;
 
-namespace Canyala.Lagoon.Serialization;
+namespace Canyala.Lagoon.Core.Serialization;
 
 /// <summary>
 /// A POSH Serializer/Deserializer (Plain Old Semantic Html)

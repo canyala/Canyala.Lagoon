@@ -26,7 +26,7 @@
 
 using System.Diagnostics;
 
-namespace Canyala.Lagoon.Contracts;
+namespace Canyala.Lagoon.Core.Contracts;
 public static class Contract
 {
     [Conditional("DEBUG")]

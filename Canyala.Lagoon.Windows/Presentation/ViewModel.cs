@@ -27,7 +27,7 @@
 
 using System.ComponentModel;
 
-namespace Canyala.Lagoon.Presentation;
+namespace Canyala.Lagoon.Windows.Presentation;
 
 public interface IViewModel
 {

@@ -26,9 +26,9 @@
 
 using System.Text;
 
-using Canyala.Lagoon.Functional;
+using Canyala.Lagoon.Core.Functional;
 
-namespace Canyala.Lagoon.Extensions;
+namespace Canyala.Lagoon.Core.Extensions;
 
 public static class EncodingExtensions
 {

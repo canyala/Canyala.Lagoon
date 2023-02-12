@@ -24,7 +24,7 @@
 //
 //-------------------------------------------------------------------------------
 
-namespace Canyala.Lagoon.Database;
+namespace Canyala.Lagoon.Windows.Database;
 
 /// <summary>
 /// Provides a custom naming attribute for records and fields.

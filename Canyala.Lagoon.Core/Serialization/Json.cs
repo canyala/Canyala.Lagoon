@@ -28,11 +28,11 @@ using System.Globalization;
 using System.Reflection;
 using System.Text;
 
-using Canyala.Lagoon.Extensions;
-using Canyala.Lagoon.Functional;
-using Canyala.Lagoon.Text;
+using Canyala.Lagoon.Core.Extensions;
+using Canyala.Lagoon.Core.Functional;
+using Canyala.Lagoon.Core.Text;
 
-namespace Canyala.Lagoon.Serialization;
+namespace Canyala.Lagoon.Core.Serialization;
 
 /// <summary>
 /// Provides json (Java Script Object Notation) serialization for value types and polymorphic composite value types.

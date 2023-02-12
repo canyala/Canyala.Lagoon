@@ -36,17 +36,17 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 
-using Canyala.Lagoon.Extensions;
-using Canyala.Lagoon.Functional;
-using Canyala.Lagoon.Database.Internal;
+using Canyala.Lagoon.Core.Extensions;
+using Canyala.Lagoon.Core.Functional;
+using Canyala.Lagoon.Windows.Database.Internal;
 using System.Data.OleDb;
 using System.Data;
 
-namespace Canyala.Lagoon.Database;
+namespace Canyala.Lagoon.Windows.Database;
 
 /// <summary>
 /// Provides a stateless, record based data access layer (DAL) for MS-SQL CE databases
-/// with engine predicate excecution implemented using query expressions.
+/// with engine predicate execution implemented using query expressions.
 /// </summary>
 public class SqlCeActiveRecord
 {

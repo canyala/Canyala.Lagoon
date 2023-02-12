@@ -26,7 +26,7 @@
 
 using System.Windows.Input;
 
-namespace Canyala.Lagoon.Command;
+namespace Canyala.Lagoon.Windows.Command;
 
 /// <summary>
 /// This implementation intentionally hides the argument sent by the Execute(object arg) interface member.

@@ -26,7 +26,7 @@
 
 using LinqExpression = System.Linq.Expressions.Expression;
 
-namespace Canyala.Lagoon.Expressions;
+namespace Canyala.Lagoon.Core.Expressions;
 
 public class Compiled : Expression
 {

@@ -27,7 +27,7 @@
 
 using System.Xml.Linq;
 
-namespace Canyala.Lagoon.Extensions;
+namespace Canyala.Lagoon.Core.Extensions;
 
 public static class XmlExtensions
 {

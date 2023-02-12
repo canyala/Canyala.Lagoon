@@ -27,15 +27,15 @@
 using System.Data.SqlClient;
 using System.Linq.Expressions;
 
-using Canyala.Lagoon.Database.Internal;
-using Canyala.Lagoon.Extensions;
-using Canyala.Lagoon.Functional;
+using Canyala.Lagoon.Windows.Database.Internal;
+using Canyala.Lagoon.Core.Extensions;
+using Canyala.Lagoon.Core.Functional;
 
-namespace Canyala.Lagoon.Database;
+namespace Canyala.Lagoon.Windows.Database;
 
 /// <summary>
 /// Provides a stateless, record based data access layer (DAL) for MS-SQL databases
-/// with serverside predicate excecution implemented using query expressions.
+/// with server side predicate execution implemented using query expressions.
 /// </summary>
 public class SqlActiveRecord
 {
@@ -67,7 +67,7 @@ public class SqlActiveRecord
         { ExecuteWriteQuery(Query.DropTable<T>(), command => command.ExecuteNonQuery()); }
 
     /// <summary>
-    /// Executes a serverside count.
+    /// Executes a server side count.
     /// </summary>
     /// <typeparam name="T">The record type, corresponds to a table.</typeparam>
     /// <param name="expression">The predicate expression to use as a condition for the count.</param>

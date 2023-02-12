@@ -24,10 +24,10 @@
 //
 //------------------------------------------------------------------------------- 
 
-using Canyala.Lagoon.Extensions;
-using Canyala.Lagoon.Functional;
+using Canyala.Lagoon.Core.Extensions;
+using Canyala.Lagoon.Core.Functional;
 
-namespace Canyala.Lagoon.Models;
+namespace Canyala.Lagoon.Core.Models;
 
 /// <summary>
 /// Represents a range in time with a start point and and end point.

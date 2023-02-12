@@ -27,7 +27,7 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace Canyala.Lagoon.Expressions;
+namespace Canyala.Lagoon.Core.Expressions;
 
 internal class Tokenizer
 {

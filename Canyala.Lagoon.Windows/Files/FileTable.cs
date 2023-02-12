@@ -24,12 +24,12 @@
 //
 //-------------------------------------------------------------------------------
 
-using Canyala.Lagoon.Collections;
-using Canyala.Lagoon.Contracts;
-using Canyala.Lagoon.Extensions;
-using Canyala.Lagoon.Text;
+using Canyala.Lagoon.Core.Collections;
+using Canyala.Lagoon.Core.Contracts;
+using Canyala.Lagoon.Core.Extensions;
+using Canyala.Lagoon.Core.Text;
 
-namespace Canyala.Lagoon.Files;
+namespace Canyala.Lagoon.Windows.Files;
 
 /// <summary>
 /// Provides an interface for text table models.

@@ -27,11 +27,11 @@
 using System.Globalization;
 using System.Text;
 
-using Canyala.Lagoon.Collections;
-using Canyala.Lagoon.Extensions;
-using Canyala.Lagoon.Functional;
+using Canyala.Lagoon.Core.Collections;
+using Canyala.Lagoon.Core.Extensions;
+using Canyala.Lagoon.Core.Functional;
 
-namespace Canyala.Lagoon.Text;
+namespace Canyala.Lagoon.Core.Text;
 
 /// <summary>
 /// Provides text analysis algorithms

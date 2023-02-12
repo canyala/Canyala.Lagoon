@@ -27,7 +27,7 @@
 using System.Collections;
 using System.Text;
 
-namespace Canyala.Lagoon.Extensions;
+namespace Canyala.Lagoon.Core.Extensions;
 
 public static class ArrayExtensions
 {

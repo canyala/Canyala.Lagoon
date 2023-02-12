@@ -24,7 +24,7 @@
 //
 //------------------------------------------------------------------------------- 
 
-namespace Canyala.Lagoon.Functional;
+namespace Canyala.Lagoon.Core.Functional;
 
 /// <summary>
 /// Provides a functional factory

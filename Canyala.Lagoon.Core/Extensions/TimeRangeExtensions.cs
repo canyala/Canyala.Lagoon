@@ -24,9 +24,9 @@
 //
 //------------------------------------------------------------------------------- 
 
-using Canyala.Lagoon.Models;
+using Canyala.Lagoon.Core.Models;
 
-namespace Canyala.Lagoon.Extensions;
+namespace Canyala.Lagoon.Core.Extensions;
 
 public static class TimeRangeExtensions
 {

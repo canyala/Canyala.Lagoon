@@ -24,7 +24,7 @@
 //
 //------------------------------------------------------------------------------- 
 
-namespace Canyala.Lagoon.IO;
+namespace Canyala.Lagoon.Core.IO;
 
 /// <summary>
 /// A SubStream restricts access to a specific area of a stream and

@@ -27,7 +27,7 @@
 using System.Globalization;
 using LinqExpression = System.Linq.Expressions.Expression;
 
-namespace Canyala.Lagoon.Expressions;
+namespace Canyala.Lagoon.Core.Expressions;
 
 internal class Parser
 {

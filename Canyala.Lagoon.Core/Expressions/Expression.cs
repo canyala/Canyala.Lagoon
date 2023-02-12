@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Canyala.Lagoon.Expressions
+namespace Canyala.Lagoon.Core.Expressions
 {
     public abstract class Expression
     {

@@ -25,10 +25,10 @@
 //------------------------------------------------------------------------------- 
 
 
-using Canyala.Lagoon.Extensions;
-using Canyala.Lagoon.Functional;
-using Canyala.Lagoon.Serialization;
-using Canyala.Lagoon.Text;
+using Canyala.Lagoon.Core.Extensions;
+using Canyala.Lagoon.Core.Functional;
+using Canyala.Lagoon.Core.Serialization;
+using Canyala.Lagoon.Core.Text;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 

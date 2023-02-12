@@ -27,10 +27,10 @@
 
 using System.Dynamic;
 
-using Canyala.Lagoon.Command;
-using Canyala.Lagoon.Extensions;
+using Canyala.Lagoon.Core.Extensions;
+using Canyala.Lagoon.Windows.Command;
 
-namespace Canyala.Lagoon.Presentation;
+namespace Canyala.Lagoon.Windows.Presentation;
 
 public class PropertyManager : DynamicObject
 {
