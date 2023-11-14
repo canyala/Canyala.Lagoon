@@ -1,5 +1,5 @@
 # Canyala.Lagoon
-The Canyala.Lagoon .NET Base Class Libraries.
+The Canyala.Lagoon cross platform .NET Base Class Libraries.
 
 ## 2022-12-31
 - Port to .NET 7 complete
